@@ -1,0 +1,103 @@
+﻿@model List<Travel.Application.ViewModels.Tour.TourViewModel>
+@{
+    ViewData["Title"] = "All Tour  categories";
+
+}
+<!-- Breadcrumbs -->
+<!--================Blog Area =================-->
+<section class="blog_area section_gap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="blog_left_sidebar">
+                    @foreach (var item in Model)
+                    {
+                        <article class="row blog_item">
+                            <div class="col-md-4">
+                                <div class="blog_info text-right">
+                                    <ul class="blog_meta list">
+                                        <li><a title="Ngày đi">Ngày đi: @item.Departure.ToString("dd-MM-yyyy")<i class="lnr lnr-calendar-full"></i></a></li>
+                                        <li><a title="Số ngày đi">Sô ngày đi: @item.Duration<i class="lnr lnr-calendar-full"></i></a></li>
+                                        <li><a title="Lượt xem">Lượt xem: @string.Format("{0:#,0.00}", item.ViewCount)<i class="lnr lnr-eye"></i></a></li>
+
+                                        @if (item.SeatAvailability > 0)
+                                        {
+                                            <li>
+                                                <a title="Số vé còn lại">
+                                                    Vé còn: @item.SeatAvailability <i class="lnr lnr-star-half"></i>
+                                                </a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <a title="Số vé còn lại">
+                                                    Hết vé<i class="lnr lnr-license"></i>
+                                                </a>
+                                            </li>
+                                        }
+                                        <li><a title="Giá"> Giá: @item.Price.ToString("#,###") đ<i class="lnr lnr-license"></i></a></li>
+
+                                        @if (item.PromotionPrice == 0 || item.PromotionPrice == null)
+                                        {
+                                            @if (item.HotFlag == true)
+                                            {
+                                                <li><a href="#">HOT<i class="lnr lnr-heart-pulse"></i></a></li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li><a href="#"> Giá KM: @String.Format("{0:N0}", item.PromotionPrice) đ<i class="lnr lnr-license"></i></a></li>
+                                            <li><a href="#">Giảm @(100 - (int)((item.PromotionPrice / item.Price) * 100))%<i class="lnr lnr-download"></i></a></li>
+                                        }
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="blog_post">
+                                    <a href="/@item.SeoAlias-p.@(item.Id).html">
+                                        <img src="@item.Image" alt="">
+                                    </a>
+                                    <div class="blog_details">
+                                        <a href="/@item.SeoAlias-p.@(item.Id).html">
+                                            <h2>@item.Name</h2>
+                                        </a>
+                                        <p>
+                                            @item.Description
+                                        </p>
+                                        <a href="/@item.SeoAlias-p.@(item.Id).html" class="main_btn" title="Xem chi tiết"><i class="fa fa-info-circle"></i></a>
+                                        @if (item.SeatAvailability >= 1)
+                                        {
+                                            <a href="#" class="main_btn btnAddToCart" data-id="@item.Id" title="Thêm giỏ hàng"><i class="fa fa-shopping-bag"></i></a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="blog_right_sidebar">
+                    <aside class="single_sidebar_widget search_widget">
+                        <form class="input-group" action="/tim-kiem.html" method="post">
+                            <input name="keyword" value="@ViewData["keyword"]" type="text" class="form-control" placeholder="Tìm kiếm" title="Điểm đến, ngày đi, loại tour...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit"><i class="lnr lnr-magnifier"></i></button>
+                            </span>
+                        </form><!-- /input-group -->
+                        <div class="br"></div>
+                    </aside>
+                    <vc:top-tour></vc:top-tour>
+                    <aside class="single_sidebar_widget ads_widget">
+                        <a href="#"><img class="img-fluid" src="~/client-assets/img/blog/add.jpg" alt=""></a>
+                        <div class="br"></div>
+                    </aside>
+                    <vc:category-menu-side-bar></vc:category-menu-side-bar>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================Blog Area =================-->

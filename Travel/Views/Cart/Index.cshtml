@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewData["Title"] = "Giỏ hàng";
+}
+@section Scripts{
+    <script src="~/client-side/js/controllers/cart/index.js" asp-append-version="true"></script>
+    <script>
+        var cartObj = new CartController();
+        cartObj.initialize();
+    </script>
+}
+<!-- cart-main-area start -->
+<div class="cart-main-area ptb--120 bg__white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <form action="#">
+                    <div class="table-content table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="product-thumbnail">Hình SP</th>
+                                    <th class="product-name">Tour</th>
+                                    <th class="product-price">Giá</th>
+                                    <th class="product-quantity">Số lượng</th>
+                                    <th class="product-subtotal">Tổng</th>
+                                    <th class="product-remove">Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-cart-content">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 col-sm-7 col-xs-12">
+                            <div class="buttons-cart">
+                                <input type="submit" value="Cập nhật giỏ hàng" />
+                                <a asp-controller="home">Chọn tour khác</a>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-5 col-xs-12">
+                            <div class="cart_totals">
+                                <h2>Tổng giỏ hàng</h2>
+                                <table>
+                                    <tbody>
+                                        <tr class="order-total">
+                                            <th>Thành tiền</th>
+                                            <td>
+                                                <strong><span class="amount" id="lblTotalAmount"></span></strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <script id="template-cart" type="x-tmpl-mustache">
+                                    <tr data-id="{{TourId}}">
+                                        <td class="product-thumbnail"><a href="{{Url}}"><img src="{{Image}}" alt="{{TourName}}" /></a></td>
+                                        <td class="product-name">
+                                            <a href="{{Url}}">{{TourName}}</a>
+                                        </td>
+                                        <td class="product-price"><span class="amount">{{Price}}đ</span></td>
+                                        <td class="product-quantity"><input type="number" min="1" class="txtQuantity" value="{{Quantity}}" data-id="{{TourId}}" /></td>
+                                        <td class="product-subtotal">{{Amount}}đ</td>
+                                        <td class="product-remove"><a href="#" class="remove-cart" id="remove-cart" data-id="{{TourId}}">X</a></td>
+                                    </tr>
+                                </script>
+                                <div class="wc-proceed-to-checkout">
+                                    <a href="/checkout.html">Xác nhận đặt tour</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- cart-main-area end -->

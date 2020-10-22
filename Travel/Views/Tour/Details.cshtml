@@ -1,0 +1,310 @@
+﻿@model Travel.Models.TourViewModels.DetailViewModel
+@{
+    ViewData["Title"] = Model.Tour.Name;
+    ViewData["MetaKeyword"] = Model.Tour.SeoKeywords;
+    ViewData["MetaDescription"] = Model.Tour.SeoDescription;
+    var category = Model.Category;
+    var tour = Model.Tour;
+}
+<!-- Start Product Details -->
+<section class="htc__product__details pt--10 pb--100 bg__white">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-8 col-lg-8 smt-30 xmt-30">
+                <div class="htc__product__details__inner">
+                    <div class="pro__detl__title">
+                        <h2>@tour.Name</h2>
+                    </div>
+                    <div class="pro__details">
+                        <p>@tour.Description</p>
+                    </div>
+                    <ul class="pro__dtl__prize">
+                        @if (tour.PromotionPrice > 0)
+                        {
+                            <li class="old__prize">@String.Format("{0:N0}", tour.Price)₫</li>
+                            <li>@String.Format("{0:N0}", tour.PromotionPrice)₫</li>
+                        }
+                        else
+                        {
+                            <li>@String.Format("{0:N0}", tour.Price)₫</li>
+                        }
+                    </ul>
+                    <div class="product-action-wrap">
+                        <div class="prodict-statas"><span>Vé còn lại: @tour.SeatAvailability</span></div>
+                    </div>
+                        <div class="product-action-wrap">
+                            <div class="prodict-statas"><span>Số lượng :</span></div>
+                            <div class="product-quantity" style="background-color:gray">
+                                <form id='myform' method='POST' action='#'>
+                                    <div class="product-quantity">
+                                        <div class="cart-plus-minus">
+                                            <input data-max="@tour.SeatAvailability" class="cart-plus-minus-box" type="text" id="qtybutton" name="qtybutton" value="01" max="@tour.SeatAvailability">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <ul class="pro__dtl__btn">
+                            @if (tour.SeatAvailability >= 1)
+                            {
+                                <li class="buy__now__btn"><a data-id="@tour.Id" href="#" id="addToCart">Thêm vào giỏ hàng</a></li>
+                            }
+                            else
+                            {
+                                <li class="buy__now__btn"><a href="#">Hết vé</a></li>
+                            }
+                        </ul>
+                        @if (Model.Tags.Count > 0)
+                        {
+                            <div class="pro__social__share">
+                                <h2>Tags:</h2>
+                                <div class="col-md-auto">
+                                    @foreach (var tag in Model.Tags)
+                                    {
+                                        <a href="/tag.@(tag.Id).html" class="btn btn-default main_btn">@tag.Name</a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+        </div>
+        <div class="clearfix"></div>
+        <hr />
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="w3-content w3-display-container thumb img-fluid nw-img">
+                    <img class="mySlides" src="@tour.Image">
+
+                    @if (Model.TourImages.Count > 0)
+                    {
+                        @foreach (var item in Model.TourImages)
+                        {
+                            <img class="mySlides" src="@item.Path" style="min-height:500px; width:100%" />
+                        }
+                        <button class="w3-button w3-black w3-display-left main_btn" onclick="plusDivs(-1)">&#10094;</button>
+                        <button class="w3-button w3-black w3-display-right main_btn" onclick="plusDivs(1)">&#10095;</button>
+                    }
+                </div>
+            </div>
+        </div>
+        <script>
+            var slideIndex = 0;
+            carousel();
+
+            function carousel() {
+                var i;
+                var x = document.getElementsByClassName("mySlides");
+                for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                }
+                slideIndex++;
+                if (slideIndex > x.length) { slideIndex = 1 }
+                x[slideIndex - 1].style.display = "block";
+                setTimeout(carousel, 8000); // Change image every 5 seconds
+            }
+            function plusDivs(n) {
+                showDivs(slideIndex += n);
+            }
+
+            function showDivs(n) {
+                var i;
+                var x = document.getElementsByClassName("mySlides");
+                if (n > x.length) { slideIndex = 1 }
+                if (n < 1) { slideIndex = x.length };
+                for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                }
+                x[slideIndex - 1].style.display = "block";
+            }
+        </script>
+    </div>
+</section>
+<!-- End Product Details -->
+<!-- Start Product tab -->
+<section class="htc__product__details__tab bg__white pb--120">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                        <div class="">
+                            @if (tour.Content == null)
+                            {
+                                <p>Chưa có thông tin</p>
+                            }
+                            else
+                            {
+                                @Html.Raw(tour.Content)
+                            }
+                        </div>
+                    </div>
+                    <!-- End Single Content -->
+        </div>
+    </div>
+</section>
+<!-- End Product tab -->
+<section class="htc__product__area bg__white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-style-tab">
+                    <div class="product-tab-list">
+                        <!-- Nav tabs -->
+                        <ul class="tab-style" role="tablist">
+                            <li class="active">
+                                <a href="#home1" data-toggle="tab">
+                                    <div class="tab-menu-text">
+                                        <h4>Tour tương tự</h4>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content another-product-style jump">
+                        <div class="tab-pane active" id="home1">
+                            <div class="row">
+                                <div class="product-slider-active owl-carousel">
+                                    @foreach (var item in Model.RelatedTours)
+                                    {
+                                        <div class="col-md-6 single__pro col-lg-6 cat--1 col-sm-6 col-xs-12">
+                                            <div class="product">
+                                                <div class="product__inner">
+                                                    <div class="pro__thumb">
+                                                        <a href="/@item.SeoAlias-p.@(item.Id).html">
+                                                            <img src="@item.Image" alt="@item.Name">
+                                                        </a>
+                                                    </div>
+                                                    <div class="product__hover__info">
+                                                        <ul class="product__action">
+                                                            <li><a data-id="@item.Id" title="Xem chi tiết" class="quick-view modal-view detail-link btnProductDetail"><span class="ti-plus"></span></a></li>
+                                                            <li><a title="Thêm vào giỏ hàng" href="cart.html"><span class="ti-shopping-cart"></span></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="product__details">
+                                                    @if (item.PromotionPrice == 0 || item.PromotionPrice == null)
+                                                    {
+                                                        @if (item.HotFlag == true)
+                                                        {
+                                                            <div class="promotion">
+                                                                <span class="center">HOT</span>
+                                                            </div>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="promotion">
+                                                            <span class="center">@(100 - (int)((item.PromotionPrice / item.Price) * 100))%</span>
+                                                        </div>
+                                                    }
+                                                    <h2><a href="/@item.SeoAlias-p.@(item.Id).html">@item.Name</a></h2>
+                                                    <ul class="product__price">
+                                                        @if (item.PromotionPrice == 0 || item.PromotionPrice == null)
+                                                        {
+                                                            <li class="new__price"> @String.Format("{0:N0}", item.Price)₫</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li class="old__price">
+                                                                @String.Format("{0:N0}", item.Price) ₫
+                                                            </li>
+                                                            <li class="new__price"> @String.Format("{0:N0}", item.PromotionPrice) ₫</li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="htc__product__area bg__white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-style-tab">
+                    <div class="product-tab-list">
+                        <!-- Nav tabs -->
+                        <ul class="tab-style" role="tablist">
+                            <li class="active">
+                                <a href="#home2" data-toggle="tab">
+                                    <div class="tab-menu-text">
+                                        <h4>Tour đang giảm giá</h4>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content another-product-style jump">
+                        <div class="tab-pane active" id="home2">
+                            <div class="row">
+                                <div class="product-slider-active owl-carousel">
+                                    @foreach (var item in Model.UpsellTours)
+                                    {
+                                        <div class="col-md-6 single__pro col-lg-6 cat--1 col-sm-6 col-xs-12">
+                                            <div class="product">
+                                                <div class="product__inner">
+                                                    <div class="pro__thumb">
+                                                        <a href="/@item.SeoAlias-p.@(item.Id).html">
+                                                            <img src="@item.Image" alt="@item.Name">
+                                                        </a>
+                                                    </div>
+                                                    <div class="product__hover__info">
+                                                        <ul class="product__action">
+                                                            <li><a data-id="@item.Id" title="Xem chi tiết" class="quick-view modal-view detail-link btnProductDetail"><span class="ti-plus"></span></a></li>
+                                                            <li><a title="Thêm vào giỏ hàng" href="cart.html"><span class="ti-shopping-cart"></span></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="product__details">
+                                                    @if (item.PromotionPrice == 0 || item.PromotionPrice == null)
+                                                    {
+                                                        @if (item.HotFlag == true)
+                                                        {
+                                                            <div class="promotion">
+                                                                <span class="center">HOT</span>
+                                                            </div>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="promotion">
+                                                            <span class="center">@(100 - (int)((item.PromotionPrice / item.Price) * 100))%</span>
+                                                        </div>
+                                                    }
+                                                    <h2><a href="/@item.SeoAlias-p.@(item.Id).html">@item.Name</a></h2>
+                                                    <ul class="product__price">
+                                                        @if (item.PromotionPrice == 0 || item.PromotionPrice == null)
+                                                        {
+                                                            <li class="new__price"> @String.Format("{0:N0}", item.Price)₫</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li class="old__price">
+                                                                @String.Format("{0:N0}", item.Price) ₫
+                                                            </li>
+                                                            <li class="new__price"> @String.Format("{0:N0}", item.PromotionPrice) ₫</li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@Html.Partial("_TourDetail.cshtml")

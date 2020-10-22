@@ -1,0 +1,85 @@
+﻿@using System.Collections.Generic
+@using System.Linq
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Authentication
+@model LoginViewModel
+@inject SignInManager<AppUser> SignInManager
+
+@{
+    ViewData["Title"] = "ĐĂNG NHẬP";
+}
+
+<div class="htc__login__register bg__white ptb--50">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="htc__login__register__wrap">
+                <h1>@ViewData["Title"]</h1>
+            </div>
+        </div>
+        <div class="col-md-6 col-md-offset-3">
+            <div class="htc__login__register__wrap">
+                <div id="login" role="tabpanel" class="single__tabs__panel tab-pane fade in active">
+                    <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                        <hr />
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password"></label>
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="tabs__checkbox">
+                                <label asp-for="RememberMe">
+                                    <input asp-for="RememberMe" />
+                                    @Html.DisplayNameFor(m => m.RememberMe)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="htc__login__btn mt--30">
+                            <button type="submit" class="main_btn">Đăng nhập</button>
+                        </div>
+
+                        <div class="form-group">
+                            <p>
+                                <a asp-action="ForgotPassword">Quên mật khẩu?</a>
+                            </p>
+                            <p>
+                                <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Chưa có tài khoản?</a>
+                            </p>
+                        </div>
+                    </form>
+                    @{
+                        var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                        if (loginProviders.Count == 0)
+                        {
+                            <p>Hiện tại chưa có đăng nhập bằng mạng xã hội.</p>
+                        }
+                        else
+                        {
+                            <p>ĐĂNG NHẬP BẰNG: </p>
+                            <form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                                <div>
+                                    <p>
+                                        @foreach (var provider in loginProviders)
+                                        {
+                                            <button type="submit" class="main_btn" name="provider" value="@provider.Name">@provider.Name</button>
+                                        }
+                                    </p>
+                                </div>
+
+                            </form>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

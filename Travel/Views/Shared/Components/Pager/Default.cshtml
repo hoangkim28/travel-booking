@@ -1,0 +1,62 @@
+﻿@model Travel.Utilities.Dtos.PagedResultBase
+@{
+    var urlTemplate = Url.Action() + "?page={0}";
+    var request = ViewContext.HttpContext.Request;
+    foreach (var key in request.Query.Keys)
+    {
+        if (key == "page")
+        {
+            continue;
+        }
+
+        urlTemplate += "&" + key + "=" + request.Query[key];
+    }
+
+    var startIndex = Math.Max(Model.CurrentPage - 5, 1);
+    var finishIndex = Math.Min(Model.CurrentPage + 5, Model.PageCount);
+}
+<nav class="blog-pagination justify-content-center d-flex">
+    @if (Model.PageCount > 1)
+    {
+        <ul class="pagination">
+            @if (Model.CurrentPage == startIndex)
+            {
+            }
+            else
+            {
+                <li class="page-item">
+                    <a href="@urlTemplate.Replace("{0}", "1")" class="page-link" aria-label="Về trang đầu">
+                        <span aria-hidden="true">
+                            <span class="lnr lnr-chevron-left"></span>
+                        </span>
+                    </a>
+                </li>
+            }
+            @for (var i = startIndex; i <= finishIndex; i++)
+            {
+                if (i == Model.CurrentPage)
+                {
+                    <li class="page-item"><a class="page-link active" href="#"><span>@i</span></a></li>
+                }
+                else
+                {
+                    <li class="page-item"><a class="page-link" href="@urlTemplate.Replace("{0}", i.ToString())">@i</a></li>
+                }
+            }
+            @if (Model.CurrentPage == finishIndex)
+            {
+            }
+            else
+            {
+                <li class="page-item">
+                    <a href="@urlTemplate.Replace("{0}", Model.PageCount.ToString())" class="page-link" aria-label="Về trang cuối">
+                        <span aria-hidden="true">
+                            <span class="lnr lnr-chevron-right"></span>
+                        </span>
+                    </a>
+                </li>
+            }
+        </ul>
+    }
+
+</nav>

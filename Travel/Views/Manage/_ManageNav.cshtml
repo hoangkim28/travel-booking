@@ -1,0 +1,16 @@
+﻿@using Travel.Views.Manage
+@inject SignInManager<AppUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+    <ul class="nav nav-pills nav-stacked">
+        <li class="@ManageNavPages.HistoryNavClass(ViewContext)"><a asp-action="History">Lịch sử đặt hàng</a></li>
+        <li class="@ManageNavPages.IndexNavClass(ViewContext)"><a asp-action="Index">Thông tin</a></li>
+        <li class="@ManageNavPages.ChangePasswordNavClass(ViewContext)"><a asp-action="ChangePassword">Mật khẩu</a></li>
+        @if (hasExternalLogins)
+        {
+            <li class="@ManageNavPages.ExternalLoginsNavClass(ViewContext)"><a asp-action="ExternalLogins">Liên kế mạng xã hội</a></li>
+        }
+        <li class="@ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)"><a asp-action="TwoFactorAuthentication">Xác thực 2 lớp</a></li>
+    </ul>

@@ -1,0 +1,38 @@
+﻿@model List<ShoppingCartViewModel>
+<div class="shopping__cart" id="headerCart">
+    <div class="shopping__cart__inner">
+        <div class="offsetmenu__close__btn">
+            <a href="#"><i class="zmdi zmdi-close"></i></a>
+        </div>
+        <div class="shp__cart__wrap">
+            @if (Model.Count > 0)
+            {@foreach (var item in Model)
+                {
+                    var url = "/" + item.Tour.SeoAlias + "-p." + item.Tour.Id + ".html";
+                    <div class="shp__single__Tour">
+                        <div class="shp__pro__thumb">
+                            <a href="@url">
+                                <img src="@item.Tour.Image" alt="@item.Tour.Name">
+                            </a>
+                        </div>
+                        <div class="shp__pro__details">
+                            <h2><a href="@url">@item.Tour.Name</a></h2>
+                            <span class="quantity">QTY: @item.Quantity</span>
+                            <span class="shp__price">@((item.Tour.PromotionPrice ?? item.Tour.Price).ToString("N0")) đ</span>
+                        </div>
+                        <div class="remove__btn">
+                            <a href="#" title="Remove this item"><i class="zmdi zmdi-close"></i></a>
+                        </div>
+                    </div>
+                }}
+        </div>
+        <ul class="shoping__total">
+            <li class="subtotal">Tổng:</li>
+            <li class="total__price">@Model.Sum(x => x.Quantity * x.Price).ToString("N0") đ</li>
+        </ul>
+        <ul class="shopping__btn">
+            <li><a href="cart.html">Xem giỏ hàng</a></li>
+            <li class="shp__checkout"><a href="checkout.html">Checkout</a></li>
+        </ul>
+    </div>
+</div>

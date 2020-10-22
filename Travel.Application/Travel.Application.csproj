@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.1.1" />
+    <PackageReference Include="EPPlus" Version="4.5.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Travel.Data.EF\Travel.Data.EF.csproj" />
+    <ProjectReference Include="..\Travel.Data\Travel.Data.csproj" />
+    <ProjectReference Include="..\Travel.Utilities\Travel.Utilities.csproj" />
+  </ItemGroup>
+
+</Project>

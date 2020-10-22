@@ -1,0 +1,79 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Travel.Models
+@using Microsoft.AspNetCore.Http
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+@await Component.InvokeAsync("MainMenu")
+
+<style>
+    #feedback {
+        height: 0px;
+        width: 95px;
+        position: fixed;
+        right: 0;
+        bottom: 20vh;
+        z-index: 1000;
+    }
+
+        #feedback a:hover {
+            background: #ff6a00;
+        }
+</style>
+<!--================ End Canvus Menu Area =================-->
+<div id="feedback">
+    <a href="/cart.html" class="main_btn" style="background: #f8b600;">
+        <i class="fa fa-shopping-bag"></i>
+        <span id="cart-item-display"></span>
+    </a>
+</div>
+<section class="top-btn-area" style="padding-top:70px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <script>
+                    function showElem() {
+                        var input = document.getElementById("keyword");
+                        input.style.visibility = "visible";
+                        var aSeach = document.getElementById("aSeach");
+                        aSeach.style.visibility = "hidden";
+                        var btnSeach = document.getElementById("btnSeach");
+                        btnSeach.style.visibility = "visible";
+                    }
+                </script>
+                <form action="/tim-kiem.html" method="post">
+                    <input type="search" data-id="0" value="@ViewData["keyword"]" id="keyword" name="keyword" placeholder="Từ khóa..." class="col-md-3 col-lg-3 main_btn" style="line-height: 48px;
+        padding: 0px 25px;
+        visibility: hidden;" />
+                    <a onclick="showElem();" id="aSeach" class="main_btn">
+                        Tìm kiếm
+                    </a>
+                    <button type="submit" class="main_btn" id="btnSeach" style="visibility:hidden"><i class="fa fa-search"></i></button>
+                    <a href="/tours.html" class="main_btn">
+                        Đặt ngay
+                        <img src="~/client-assets/img/next.png" alt="">
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function loadHeaderCart() {
+        totalQty = 0;
+        $.ajax({
+            url: '/Cart/GetCart',
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                $.each(response, function (i, item) {
+                    totalQty += item.Quantity;
+                });
+                $('#cart-item-display').text(totalQty);
+
+            }
+        });
+        return false;
+    }
+    loadHeaderCart();
+</script>

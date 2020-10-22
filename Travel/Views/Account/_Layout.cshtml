@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic page needs -->
+    <meta charset="utf-8">
+    <!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <![endif]-->
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="@ViewData["MetaKeyword"]">
+    <meta name="keywords" content="@ViewData["MetaDescription"]" />
+
+    <!-- Mobile specific metas  -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Favicons Icon -->
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="~/lib/customer-assets/css/bootstrap.min.css" />
+    <!-- Owl Carousel main css -->
+    <link rel="stylesheet" href="~/lib/customer-assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/lib/customer-assets/css/owl.theme.default.min.css">
+    <!-- This core.css file contents all plugings css file. -->
+    <link rel="stylesheet" href="~/lib/customer-assets/css/core.css">
+    <!-- Theme shortcodes/elements style -->
+    <link rel="stylesheet" href="~/lib/customer-assets/css/shortcode/shortcodes.css">
+    <!-- Theme main style -->
+    <link rel="stylesheet" href="~/lib/customer-assets/style.css">
+    <!-- Responsive css -->
+    <link rel="stylesheet" href="~/lib/customer-assets/css/responsive.css">
+    <!-- User style -->
+    <link rel="stylesheet" href="~/lib/customer-assets/css/custom.css">
+    <link href="~/lib/notify-metro.css" rel="stylesheet" />
+
+    <!-- Modernizr JS -->
+    <script src="~/lib/customer-assets/js/vendor/modernizr-2.8.3.min.js"></script>
+
+    <link rel="stylesheet" href="~/client-assets/css/style.css">
+    <link rel="stylesheet" href="~/client-assets/css/style2.css">
+</head>
+
+<body>
+
+    @Html.Partial("_Header.cshtml")
+    @RenderBody()
+
+    <!-- jquery latest version -->
+    <script src="~/lib/customer-assets/js/vendor/jquery-1.12.0.min.js"></script>
+    <!-- Bootstrap framework js -->
+    <script src="~/lib/customer-assets/js/bootstrap.min.js"></script>
+    <!-- All js plugins included in this file. -->
+    <script src="~/lib/customer-assets/js/plugins.js"></script>
+    <script src="~/lib/customer-assets/js/slick.min.js"></script>
+    <script src="~/lib/customer-assets/js/owl.carousel.min.js"></script>
+    <!-- Waypoints.min.js. -->
+    <script src="~/lib/customer-assets/js/waypoints.min.js"></script>
+    <!-- Main js file that contents all jQuery plugins activation. -->
+    <script src="~/lib/customer-assets/js/main.js"></script>
+    <script src="~/lib/bootbox.js"></script>
+    <script src="~/lib/notify.js"></script>
+    <script src="~/app/shared/travel.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

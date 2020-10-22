@@ -1,0 +1,99 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using Travel.Authorization
+@inject IAuthorizationService AuthorizationService
+@{
+    ViewData["Title"] = "Quản lý Hóa đơn";
+}
+@section Scripts{
+    <script src="~/assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+    <script src="~/app/controller/billcompleted/index.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.vi.js"></script>
+    <script src="~/lib/jquery-validation/localization/messages_vi.js"></script>
+    <script>
+        var billObj = new FinalController();
+        billObj.initialize();
+    </script>
+}
+@section Styles{
+    <link href="~/assets/plugins/bootstrap-timepicker/css/bootstrap-responsive.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+}
+<input type="hidden" id="hid-category-id" value="0" />
+<div>
+    <div class="title_left">
+        <h1 class="text-center h1 text-uppercase">Quản lý Hóa đơn</h1>
+        <hr />
+    </div>
+    <div class="row">
+        <div class="col-md-2 col-sm-2 col-xs-12 form-group">
+            <input type="text" id="txtFromDate" class="form-control" placeholder="Từ ngày">
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-12 form-group">
+            <input type="text" id="txtToDate" class="form-control" placeholder="Đến ngày">
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-12 form-group">
+            <input type="text" id="txtSearchKeyword" class="form-control" placeholder="Tìm kiếm...">
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-12 form-group">
+            <button class="btn btn-default form-control" id="btn-search" type="button">Tìm kiếm!</button>
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-12 form-group">
+            <button aria-label="Làm rỗng tìm kiếm" data-balloon-pos="up" class="btn btn-primary form-control" id="btn-reset" type="button"><span style="color:white">Reset</span></button>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table id="example" class="table table-bordered">
+                <thead class="thead-dark">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Họ tên</th>
+                        <th>Email</th>
+                        <th>Điện thoại</th>
+                        <th>Phương thức thanh toán</th>
+                        <th>Ngày đặt</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl-content"></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-5">
+            <div class="dataTables_info" id="datatable-checkbox_info" role="status" aria-live="polite">
+                <select id="ddl-show-page">
+                    <option value="10" selected="selected">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                </select>
+                <span class="item-per-page">
+                    bản ghi/trang.
+                </span>
+                Tổng số bản ghi: <strong id="lbl-total-records"></strong>
+            </div>
+        </div>
+        <div class="col-sm-7">
+            <div class="dataTables_paginate" id="datatable-checkbox_paginate">
+                <ul id="paginationUL"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="table-template" type="x-tmpl-mustache">
+    <tr>
+        <td>#{{Id}}</td>
+        <td>{{CustomerName}}</td>
+        <td>{{CustomerEmail}}</td>
+        <td class="text-center">{{CustomerPhone}}</td>
+        <td class="text-center">{{{PaymentMethod}}}</td>
+        <td class="text-center">{{{DateCreated}}}</td>
+        @if ((await AuthorizationService.AuthorizeAsync(User, "BILL", Operations.Read)).Succeeded)
+        {
+            <td width="5%"><button aria-label="Xem chi tiết thông tin đơn hàng" data-balloon-pos="left" data-id="{{Id}}" class="btn btn-view btn-primary"><i class="fa fa-eye"></i></button></td>
+        }
+    </tr>
+</script>
+
+@Html.Partial("_View.cshtml")

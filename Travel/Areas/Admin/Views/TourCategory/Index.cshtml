@@ -1,0 +1,119 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using Travel.Authorization
+@inject IAuthorizationService AuthorizationService
+
+@{
+    ViewData["Title"] = "Danh sách BLog";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles{
+    <link href="~/lib/jquery-easyui-1.8.4/themes/bootstrap/easyui.css" rel="stylesheet" />
+    <link href="~/lib/jquery-easyui-1.8.4/themes/icon.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+}
+@section Scripts{
+    <script src="~/lib/jquery-easyui-1.8.4/jquery.easyui.min.js"></script>
+    <script src="~/app/controller/tour-category/index.js" asp-append-version="true"></script>
+    <script>
+        var tourCateObj = new tourCategoryController();
+        tourCateObj.initialize();
+    </script>
+}
+<div>
+    <div class="row">
+        <div class="title_left">
+            <h1 class="text-left h1 text-uppercase">Quản lý Tour</h1>
+            <hr />
+        </div>
+        <div class="col-md-auto col-sm-auto col-xs-12 form-group pull-left">
+            @if ((await AuthorizationService.AuthorizeAsync(User, "Tour", Operations.Create)).Succeeded)
+            {
+                <button aria-label="Thêm mới tour" data-balloon-pos="up" class="btn btn-success" id="btnCreate" type="button">Thêm mới <i class="fa fa-plus-square"></i></button>
+            }
+
+            @*<button aria-label="Import tour bằng Excel theo mẫu" data-balloon-pos="up" class="btn btn-primary" id="btn-import" type="button">Import <i class="fa fa-file-excel-o"></i></button>
+                <button aria-label="Xuất tour ra file Excel" data-balloon-pos="up" class="btn btn-primary" id="btn-export" type="button">Export <i class="fa fa-forward"></i></button>
+                <button aria-label="Tải template mẫu để nhập tour" data-balloon-pos="up" class="btn btn-danger" href="~/templates/TourImportTemplate.xlsx">Tải Template <i class="fa fa-cloud-download"></i></button>*@
+
+        </div>
+        <div class="col-md-3 col-sm-12 form-group">
+            <select class="form-control" id="ddlCategorySearch">
+                <option>Chọn Danh mục</option>
+            </select>
+        </div>
+        <div class="input-group col-sm-6 col-md-3">
+            <input type="text" id="txtKeyword" class="form-control" placeholder="Từ khóa...">
+            <span class="input-group-btn">
+                <button aria-label="Tìm kiếm tour" data-balloon-pos="up" class="btn btn-primary" id="btnSearch" type="button">Tìm</button>
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_content">
+                    <table id="example" class="table table-bordered">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th style="width:100px">Hình</th>
+                                <th>Tên</th>
+                                <th>Diễn giải</th>
+                                <th>Ngày cập nhật</th>
+                                <th>Trạng thái</th>
+
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "TOUR_CATEGORY", Operations.Delete)).Succeeded)
+                                {
+                                    <th></th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody id="table-content">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!--Pagination-->
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div class="dataTables_info" id="datatable-checkbox_info" role="status" aria-live="polite">
+                            <select id="ddlShowPage" class="md-1">
+                                <option value="10" selected="selected">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span class="item-per-page">
+                                bản ghi/trang.
+                            </span>
+                            Tổng số bản ghi: <strong id="lblTotalRecords"></strong>
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="datatable-checkbox_paginate">
+                            <ul id="paginationUL"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="table-template" type="x-tmpl-mustache">
+    <tr>
+        <td class="text-center">{{{Image}}}</td>
+        <td>{{Name}}</td>
+        <td>{{Description}}</td>
+        <td>{{{DateModified}}}</td>
+        <td>{{{Status}}}</td>
+        @if ((await AuthorizationService.AuthorizeAsync(User, "TOUR_CATEGORY", Operations.Delete)).Succeeded)
+        {
+            <td class="text-center" width="5%">
+                <button data-id="{{Id}}" aria-label="Sửa danh mục tour" data-balloon-pos="left" id="btn-edit" name="btn-edit" class="btn btn-danger btn-sm btn-edit"><i class="fa fa-pencil"></i></button>
+            </td>
+        }
+
+    </tr>
+</script>
+@Html.Partial("_AddEditModal.cshtml")

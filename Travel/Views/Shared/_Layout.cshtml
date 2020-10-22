@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic page needs -->
+    <meta charset="utf-8">
+    <!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <![endif]-->
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>@ViewData["Title"] - Travelista</title>
+    <meta name="description" content="@ViewData["MetaKeyword"]">
+    <meta name="keywords" content="@ViewData["MetaDescription"]" />
+
+    <!-- Mobile specific metas  -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicons Icon -->
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="~/client-assets/js/jquery-3.2.1.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/client-assets/css/bootstrap.css">
+    <link rel="stylesheet" href="~/client-assets/vendors/linericon/style.css">
+    <link rel="stylesheet" href="~/client-assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/client-assets/vendors/owl-carousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/client-assets/vendors/nice-select/css/nice-select.css">
+    <link rel="stylesheet" href="~/client-assets/vendors/animate-css/animate.css">
+    <link rel="stylesheet" href="~/client-assets/vendors/jquery-ui/jquery-ui.css">
+    <link rel="stylesheet" href="~/client-assets/vendors/popup/magnific-popup.css">
+    <link rel="stylesheet" href="~/client-assets/vendors/swiper/css/swiper.min.css">
+    <link rel="stylesheet" href="~/client-assets/vendors/scroll/jquery.mCustomScrollbar.css">
+    <!-- Owl Carousel main css -->
+    <link rel="stylesheet" href="~/lib/customer-assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/lib/customer-assets/css/owl.theme.default.min.css">
+    <!-- This core.css file contents all plugings css file. -->
+    <link rel="stylesheet" href="~/lib/customer-assets/css/core.css">
+    <!-- Theme shortcodes/elements style -->
+    <link rel="stylesheet" href="~/lib/customer-assets/css/shortcode/shortcodes.css">
+    <!-- Theme main style -->
+    <link rel="stylesheet" href="~/lib/customer-assets/style.css">
+    <!-- Responsive css -->
+    <link rel="stylesheet" href="~/lib/customer-assets/css/responsive.css">
+    <!-- User style -->
+    <link rel="stylesheet" href="~/lib/customer-assets/css/custom.css">
+    <!-- main css -->
+    <link rel="stylesheet" href="~/client-assets/css/style.css">
+    <link rel="stylesheet" href="~/client-assets/css/style2.css">
+    <link href="~/lib/notify-metro.css" rel="stylesheet" />
+    <link href="~/lib/balloon/balloon.css" rel="stylesheet" />
+    <style>
+        .mySlides {
+            display: none;
+        }
+        .img-fluid-2{
+            max-width:100%;
+            height:250px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    @Html.Partial("_Header.cshtml")
+
+    @RenderSection("banner", required: false)
+    <!-- Body -->
+    @RenderBody()
+
+    <!-- Footer -->
+ 
+    <!-- End Footer -->
+    <!-- jquery latest version -->
+    <script src="~/lib/customer-assets/js/vendor/jquery-1.12.0.min.js"></script>
+    <!-- Bootstrap framework js -->
+    <script src="~/lib/customer-assets/js/bootstrap.min.js"></script>
+    <!-- All js plugins included in this file. -->
+    <script src="~/lib/customer-assets/js/plugins.js"></script>
+    <script src="~/lib/customer-assets/js/slick.min.js"></script>
+    <script src="~/lib/customer-assets/js/owl.carousel.min.js"></script>
+    <!-- Waypoints.min.js. -->
+    <script src="~/lib/customer-assets/js/waypoints.min.js"></script>
+    <!-- Main js file that contents all jQuery plugins activation. -->
+    <script src="~/lib/customer-assets/js/main.js"></script>
+
+    <script src="~/client-assets/js/popper.js"></script>
+    <script src="~/client-assets/js/bootstrap.min.js"></script>
+    <script src="~/client-assets/js/stellar.js"></script>
+    <script src="~/client-assets/vendors/nice-select/js/jquery.nice-select.min.js"></script>
+    <script src="~/client-assets/vendors/isotope/imagesloaded.pkgd.min.js"></script>
+    <script src="~/client-assets/vendors/isotope/isotope-min.js"></script>
+    <script src="~/client-assets/vendors/owl-carousel/owl.carousel.min.js"></script>
+    <script src="~/client-assets/vendors/jquery-ui/jquery-ui.js"></script>
+    <script src="~/client-assets/js/jquery.ajaxchimp.min.js"></script>
+    <script src="~/client-assets/js/mail-script.js"></script>
+    <script src="~/client-assets/vendors/popup/jquery.magnific-popup.min.js"></script>
+    <script src="~/client-assets/vendors/swiper/js/swiper.min.js"></script>
+    <script src="~/client-assets/vendors/scroll/jquery.mCustomScrollbar.js"></script>
+    <script src="~/client-assets/js/theme.js"></script>
+    <script src="~/lib/notify.js"></script>
+    <script src="~/lib/notify-metro.js"></script>
+    <script src="~/lib/bootbox.js"></script>
+    <script src="~/app/shared/travel.js"></script>
+    <script src="~/js/mustache.js"></script>
+    <script src="~/client-side/js/controllers/base/index.js"></script>
+    <script>
+        var baseObj = new BaseController();
+        baseObj.initialize();
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,118 @@
+﻿@model Travel.Application.ViewModels.System.AppUserViewModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData.AddActivePage(ManageNavPages.Index);
+}
+<div class="row">
+    <div class="col-md-6">
+        <form action="/Manage/UpdateProfile" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="Id" type="hidden" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input asp-for="Avatar" type="hidden" class="form-control" />
+                <span asp-validation-for="Avatar" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Avatar"></label>
+
+                <div class="form-group">
+                    <div>
+                        <input name="txtImageM" class="form-control" id="txtImageM" type="hidden" />
+                        <input type="file" id="fileInputImage" style="display:none" accept="image/*" />
+                        <span class="input-group-btn">
+                            <input type="button" id="btnSelectImg" class="btn btn-default" value="Chọn hình" />
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                    <image id="imageShowM" src="" style="width:250px; height:auto" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="FullName"></label>
+                <input asp-for="FullName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="BirthDay"></label>
+                <input asp-for="BirthDay" type="date" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" disabled class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <br />
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Lưu</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script>
+        var ProfileController = function () {
+            this.initialize = function () {
+                registerEvents();
+                dangky();
+            }
+            function dangky() {
+                document.getElementById("imageShowM").src = document.getElementById("Avatar").value;
+            }
+            function registerEvents() {
+                $('#btnSelectImg').on('click', function () {
+                    $('#fileInputImage').click();
+                });
+                $("#fileInputImage").on('change', function () {
+                    var fileUpload = $(this).get(0);
+                    var filePath = fileUpload.value;
+                    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.tiff|\.bmp)$/i;
+                    if (!allowedExtensions.exec(filePath)) {
+                        travel.notify('Hãy chọn file hình .jpeg/.jpg/.png/.gif/.tiff/.bmp .', 'error')
+                        fileInput.value = '';
+                        return false;
+                    } else {
+                        var files = fileUpload.files;
+                        var data = new FormData();
+                        for (var i = 0; i < files.length; i++) {
+                            data.append(files[i].name, files[i]);
+                        }
+                        $.ajax({
+                            type: "POST",
+                            url: "/Admin/Upload/UploadImage",
+                            contentType: false,
+                            processData: false,
+                            data: data,
+                            success: function (path) {
+                                $('#txtImageM').val(path);
+                                document.getElementById("imageShowM").style.visibility = "visible";
+                                document.getElementById("imageShowM").src = path;
+                                document.getElementById("Avatar").value = path;
+                            },
+                            error: function () {
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        var obj = new ProfileController();
+        obj.initialize();
+    </script>
+
+}

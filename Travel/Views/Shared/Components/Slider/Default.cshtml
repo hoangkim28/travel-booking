@@ -1,0 +1,26 @@
+﻿@model List<Travel.Application.ViewModels.Common.SlideViewModel>
+<!-- Start Left Feature -->
+<div class="col-md-9 col-lg-9 col-sm-8 col-xs-12 float-left-style">
+    <!-- Start Slider Area -->
+    <div class="slider__container slider--one">
+        <div class="slider__activation__wrap owl-carousel owl-theme">
+            <!-- Start Single Slide -->
+            @foreach (var slide in Model)
+            {
+                <div class="slide slider__full--screen slider-height-inherit  slider-text-left" style="background: rgba(0, 0, 0, 0) url(@slide.Image) no-repeat scroll center center / cover ;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12">
+                                <div class="slider__inner">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <!-- End Single Slide -->
+        </div>
+            
+    </div>
+    <!-- Start Slider Area -->
+</div>

@@ -1,0 +1,75 @@
+﻿@model BillViewModel
+    <!-- Page Content -->
+<div class="cart-main-area ptb--120 bg__white">
+    <div class="container">
+        <div id="main-wrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-white">
+                        <div class="panel-body">
+                            <div class="col-md-4" style="padding-left:0;">
+                                <h3 class="m-b-md m-t-xxs"><b>TRAVELISTA.COM.VN</b></h3>
+                                <address>
+                                    Hẻm 116A Đường 3-2 (xéo cổng A ĐH Cần Thơ), Xuân Khánh, Ninh Kiều, Cần Thơ, Vietnam<br>
+                                    0355 640 750
+                                </address>
+                            </div>
+                            <div class="col-md-8 text-right" style="padding-right:0;">
+                                <button type="button" class="btn btn-default"><i class="fa fas-print"></i> In hóa đơn</button>
+                            </div>
+                            <div class="col-md-12" style="padding-left:0;">
+                                <strong> Mã đơn hàng: #@Model.Id</strong><br>
+                                <strong> Trạng thái đơn hàng: @Model.BillStatus</strong><br>
+                                <strong> Ngày  đặt hàng: @Model.DateCreated</strong><br />
+                                <hr>
+                                <p>
+                                    <strong>Thông tin khách hàng</strong><br>
+                                    Tên khách hàng: @Model.CustomerName<br>
+                                    SĐT: @Model.CustomerMobile <br>
+                                    Địa chỉ: @Model.CustomerAddress<br>
+                                    Tin nhắn: @Model.CustomerMessage <br />
+                                </p>
+                            </div>
+                            <div class="col-md-12" style="padding-left:0;padding-right:0;">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Tên Tour</th>
+                                            <th>Số lượng vé</th>
+                                            <th>Giá</th>
+                                            <th>Tổng</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{ 
+                                            decimal Amount = 0;
+                                        }
+                                        @foreach (var item in Model.BillDetails)
+                                        {
+                                            <tr>
+                                                <td>@item.Tour.Name</td>
+                                                <td>@item.Quantity</td>
+                                                <td>@String.Format("{0:N0}", item.Price)₫</td>
+                                                <td>@String.Format("{0:N0}", item.Price*item.Quantity)₫</td>
+                                            </tr>
+                                            Amount += item.Quantity * item.Price;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-8" style="padding-left:0;">
+                            </div>
+                            <div class="col-md-4" style="padding-right:0;">
+                                <div class="text-right">
+                                    <hr>
+                                    <h4 class="no-m m-t-md text-success">Tổng đơn hàng</h4>
+                                    <h1 class="no-m text-success">@String.Format("{0:N0}", Amount)₫</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- Row -->
+        </div><!-- Main Wrapper -->
+    </div><!-- /Page Inner -->
+</div><!-- /Page Content -->

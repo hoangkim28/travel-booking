@@ -1,0 +1,119 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using Travel.Authorization
+@inject IAuthorizationService AuthorizationService
+@{
+    ViewData["Title"] = "Danh sách người dùng";
+}
+@section Scripts{
+
+    <script src="~/app/controller/user/index.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/localization/messages_vi.js"></script>
+    <script>
+        var userObj = new UserController();
+        userObj.initialize();
+    </script>
+}
+@section Styles{
+
+}
+<input type="hidden" id="hid-category-id" value="0" />
+<div>
+    <div class="row">
+        <div class="title_left">
+            <h1 class="text-center h1 text-uppercase">Quản lý Người dùng</h1>
+            <div class="col-md-auto col-sm-auto col-xs-12 form-group pull-left">
+                @{
+                    var result = await AuthorizationService.AuthorizeAsync(User, "USER", Operations.Create);
+                }
+                @if (result.Succeeded)
+                {
+                    <button aria-label="Thêm mới người dùng" data-balloon-pos="up" class="btn btn-success" id="btn-create" type="button">Thêm mới</button>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_content">
+                    <div class="input-group col-md-5 form-group">
+                        <input type="text" id="txt-search-keyword" class="form-control" placeholder="Từ khóa...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" id="btnSearch" type="button">Tìm</button>
+                        </span>
+                    </div>
+                    <table id="tbl-Tour" class="table table-bordered dt-responsive nowrap" cellspacing="0">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Ảnh đại diện</th>
+                                <th>Email</th>
+                                <th>Họ và tên</th>
+                                <th>Điện thoại</th>
+                                <th>Địa chỉ</th>
+                                <th>Ngày tạo</th>
+                                <th>Trạng thái</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbl-content"></tbody>
+                    </table>
+
+                    <!--Pagination-->
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <div class="dataTables_info" id="datatable-checkbox_info" role="status" aria-live="polite">
+                                <select id="ddlShowPage" class="md-1">
+                                    <option value="10" selected="selected">10</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span class="item-per-page">
+                                    bản ghi/trang.
+                                </span>
+                                Tổng số bản ghi: <strong id="lbl-total-records"></strong>
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="dataTables_paginate paging_simple_numbers" id="datatable-checkbox_paginate">
+                                <ul id="paginationUL"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script id="table-template" type="x-tmpl-mustache">
+        <tr>
+            <td>{{{Avatar}}}</td>
+            <td>{{Email}}</td>
+            <td>{{FullName}}</td>
+            <td>{{PhoneNumber}}</td>
+            <td>{{Address}}</td>
+            <td width="5%">{{{DateCreated}}}</td>
+            <td width="7%" class="text-center">{{{Status}}}</td>
+            <td class="text-center">
+                @if ((await AuthorizationService.AuthorizeAsync(User, "USER", Operations.Update)).Succeeded)
+                {
+                    <button aria-label="Cập nhật thông tin người dùng" data-balloon-pos="up" data-id="{{Id}}" class="btn btn-default btn-sm btn-edit"><i class="fa fa-pencil-square-o"></i></button>
+                }
+                @if ((await AuthorizationService.AuthorizeAsync(User, "USER", Operations.Delete)).Succeeded)
+                {
+                    <button aria-label="Xóa người dùng" data-balloon-pos="up" data-id="{{Id}}" class="btn btn-danger btn-sm btn-delete"><i class="fa fa-trash-o"></i></button>
+                }
+            </td>
+        </tr>
+    </script>
+</div>
+<script id="role-template" type="x-tmpl-mustache">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" {{Checked}} value="{{Name}}" name="ckRoles">
+            <span class="text">{{Description}}</span>
+        </label>
+    </div>
+</script>
+@Html.Partial("_AddEditModal.cshtml")

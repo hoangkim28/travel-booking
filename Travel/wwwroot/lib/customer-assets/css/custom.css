@@ -1,0 +1,80 @@
+/*--------------------------------------------------------------
+  Template Name: Tmart-Minimalist eCommerce HTML5 Template.
+  Template URI: #
+  Description: Tmart is a unique website template designed in HTML with a simple & beautiful look. There is an excellent solution for creating clean, wonderful and trending material design corporate, corporate any other purposes websites.
+  Author: Theme365
+  Version: 1.0
+---------------------------------------------------------------*/
+/* ----------------------------------------------------
+	You can put your custom css code here: 
+-------------------------------------------------------*/
+.nav-pills > li.active > a:focus {
+    color: #fff;
+    background-color: #4b4b4b;
+}
+
+.btn button:hover {
+    color: #fff;
+    background-color: #4b4b4b;
+}
+
+.htc__login__btn a {
+    color: #4b4b4b;
+}
+
+.htc__login__btn button:hover {
+    background: #ff4136;
+    color: #fff;
+    border: 1px solid #ff4136;
+}
+
+.shopping__btn .shp__checkout button {
+    background-color: #000;
+    color: #fff;
+}
+
+.shopping__btn li button:hover {
+    background: #ff4136;
+    border: 1px solid #ff4136;
+    color: #fff;
+}
+
+.promotion {
+    display: table;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    color: #fff;
+    background-color: #ff4136;
+    font-size: 14px;
+    font-weight: 400;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    z-index: 100;
+    line-height: 3;
+}
+
+    .promotion .center {
+        align-content: center;
+    }
+
+.new {
+    display: table;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    color: #fff;
+    background-color: #29e90b;
+    font-size: 14px;
+    font-weight: 400;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    z-index: 100;
+    line-height: 3;
+}
+
+.new .center {
+    align-content: center;
+}

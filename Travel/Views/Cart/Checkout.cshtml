@@ -1,0 +1,132 @@
+﻿@model CheckoutViewModel
+@{
+    ViewData["Title"] = "Checkout";
+}
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+@section Scripts {
+    <recaptcha-script validation-message-element-id="recaptchaErrorMessage" />
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+<!-- End Bradcaump area -->
+<!-- Start Checkout Area -->
+<section class="our-checkout-area ptb--120 bg__white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-8">
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                @if (ViewData["Success"] != null)
+                {
+
+                    if ((bool)ViewData["Success"] == true)
+                    {
+                        <div class="alert alert-success">
+                            Đặt vé thành công. Bạn có thể kiễm tra thông tin qua email hoặc trong mục lịch sữ đặt.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger">
+                            Có lỗi xảy ra. Vui lòng kiễm tra lại
+                        </div>
+                    }
+                }
+                else
+                {
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <form action="/checkout.html" method="post" class="ckeckout-left-sidebar">
+                            <!-- Start Checkbox Area -->
+                            @Html.AntiForgeryToken()
+                            <div class="checkout-form">
+                                <h2 class="section-title-3">THÔNG TIN KHÁCH HÀNG</h2>
+                                <div class="checkout-form-inner">
+                                    <input value="@UserManager.GetUserId(User)" asp-for="CustomerId" hidden />
+                                    <div class="single-checkout-box">
+                                        <input value="@user.Email" type="email" placeholder="Email*" asp-for="CustomerEmail" required>
+                                        <span asp-validation-for="CustomerEmail" class="text-danger"></span>
+                                    </div>
+                                    <div class="single-checkout-box">
+                                        <input value="@user.FullName" type="text" placeholder="Họ tên*" asp-for="CustomerName" required>
+                                        <span asp-validation-for="CustomerName" class="text-danger"></span>
+                                    </div>
+                                    <div class="single-checkout-box">
+                                        <input value="@user.Address" type="text" placeholder="Địa chỉ*" asp-for="CustomerAddress" required>
+                                        <span asp-validation-for="CustomerAddress" class="text-danger"></span>
+                                    </div>
+                                    <div class="single-checkout-box">
+                                        <input value="@user.PhoneNumber" type="text" pattern="[0-9]" maxlength="11" min="9" placeholder="Phone*" asp-for="CustomerMobile" required>
+                                        <span asp-validation-for="CustomerMobile" class="text-danger"></span>
+                                    </div>
+                                    <div class="single-checkout-box">
+                                        <textarea placeholder="Ghi chú thêm" asp-for="CustomerMessage"></textarea>
+                                        <span asp-validation-for="CustomerMessage" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Checkbox Area -->
+                            <!-- Start Payment Box -->
+                            <div class="payment-form">
+                                <h2 class="section-title-3">phương thức thanh toán</h2>
+                                <div class="payment-form-inner checkbox">
+                                    <ul>
+                                        @for (int i = 0; i < Model.PaymentMethods.Count; i++)
+                                        {
+                                            <li>
+                                                <label asp-for="@Model.PaymentMethods[i].Value">
+                                                    <input type="radio" name="paymentMethod" asp-for="PaymentMethod" value="@Model.PaymentMethods[i].Value">
+                                                    @Model.PaymentMethods[i].Name
+                                                </label>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- End Payment Box -->
+                            <!-- Start Payment Way -->
+                            <div class="our-payment-sestem">
+                                <h2 class="section-title-3">CHẤP NHẬN THANH TOÁN :</h2>
+                                <ul class="payment-menu">
+                                    <li><a href="#"><img src="~/lib/customer-assets/images/payment/1.jpg" alt="payment-img"></a></li>
+                                    <li><a href="#"><img src="~/lib/customer-assets/images/payment/2.jpg" alt="payment-img"></a></li>
+                                    <li><a href="#"><img src="~/lib/customer-assets/images/payment/3.jpg" alt="payment-img"></a></li>
+                                    <li><a href="#"><img src="~/lib/customer-assets/images/payment/4.jpg" alt="payment-img"></a></li>
+                                    <li><a href="#"><img src="~/lib/customer-assets/images/payment/5.jpg" alt="payment-img"></a></li>
+                                </ul>
+                                <div class="checkout-btn">
+                                    <button class="main_btn" href="#">XÁC NHẬN</button>
+                                </div>
+                            </div>
+                            <!-- End Payment Way -->
+                        </form>
+                    }
+                }
+            </div>
+            <div class="col-md-4 col-lg-4">
+                <div class="checkout-right-sidebar">
+                    <div class="our-important-note">
+                        <h2 class="section-title-3">travelista.com.vn</h2>
+                        <p class="note-desc">UY TÍN VÀ CHẤT LƯỢNG</p>
+                        <ul class="important-note">
+                            <li><a><i class="zmdi zmdi-caret-right-circle"></i>Số 1 tại việt nam, Ứng dụng công nghệ mới nhất</a></li>
+                            <li><a><i class="zmdi zmdi-caret-right-circle"></i>Thanh toán An toàn, Linh hoạt</a></li>
+                            <li><a><i class="zmdi zmdi-caret-right-circle"></i>Luôn có mức giá tốt nhất</a></li>
+                            <li><a><i class="zmdi zmdi-caret-right-circle"></i>Sản phẩm Đa dạng chất lượng</a></li>
+                            <li><a><i class="zmdi zmdi-caret-right-circle"></i>Đặt Tour Dễ dàng nhanh chóng</a></li>
+                            <li><a><i class="zmdi zmdi-caret-right-circle"></i>Hỗ trợ từ 08h00 - 22h00</a></li>
+                        </ul>
+                    </div>
+                    <div class="puick-contact-area mt--60">
+                        <h2 class="section-title-3">Liên hệ</h2>
+                        <a href="phone:+8801722889963">+012 345 678 102 </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

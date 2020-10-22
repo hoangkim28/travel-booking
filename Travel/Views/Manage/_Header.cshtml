@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Travel.Models
+
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+<!--================ Offcanvus Menu Area =================-->
+<div class="side_menu">
+    <div class="logo">
+        <a href="/">
+            <img src="~/client-assets/img/logo.png" alt="">
+        </a>
+    </div>
+    @await Component.InvokeAsync("MainMenu")
+</div>
+<!--================ End Offcanvus Menu Area =================-->
+
+<!--================ Canvus Menu Area =================-->
+<div class="canvus_menu">
+    <div class="container">
+        <div class="toggle_icon" title="Menu Bar">
+            <span></span>
+        </div>
+    </div>
+</div>
+<!--================ End Canvus Menu Area =================-->

@@ -1,0 +1,61 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Travel.Models
+
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+<header id="header" class="htc-header header--3 bg__white">
+    <!-- Start Mainmenu Area -->
+    <div id="sticky-header-with-topbar" class="mainmenu__area sticky__header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2 col-lg-2 col-sm-3 col-xs-3">
+                    <div class="logo">
+                        <a href="/">
+                            <img src="~/client-assets/img/logo-travelista.png" alt="logo">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Mainmenu Area -->
+</header>
+<div class="body__overlay"></div>
+<!-- Start Offset Wrapper -->
+<div class="offset__wrapper">
+    <!-- Start Search Popap -->
+    <div class="search__area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="search__inner">
+                        <form action="#" method="get">
+                            <input placeholder="Search here... " type="text">
+                            <button type="submit"></button>
+                        </form>
+                        <div class="search__close__btn">
+                            <span class="search__close__btn_icon"><i class="zmdi zmdi-close"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Search Popap -->
+    <!-- Start Offset MEnu -->
+    <div class="offsetmenu">
+        <div class="offsetmenu__inner">
+            <div class="offsetmenu__close__btn">
+                <a href="#"><i class="zmdi zmdi-close"></i></a>
+            </div>
+            <div class="off__contact">
+                <div class="float-right-style">
+                    @Html.Partial("_LoginPartial.cshtml")
+                </div>
+            </div>
+            <ul class="sidebar__thumd">
+            </ul>
+        </div>
+    </div>
+    <!-- End Offset MEnu -->
+</div>

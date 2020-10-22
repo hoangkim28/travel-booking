@@ -1,0 +1,18 @@
+﻿@model List<Travel.Application.ViewModels.Tour.TourViewModel>
+
+<aside class="single_sidebar_widget popular_post_widget">
+    <h3 class="widget_title">HOT TOUR</h3>
+    @foreach (var item in Model)
+    {
+        <div class="media post_item">
+            <img src="@item.Image" alt="post" style="max-height:100px;">
+            <div class="media-body">
+                <a href="/@item.SeoAlias-p.@(item.Id).html">
+                    <h3>@item.Name</h3>
+                </a>
+                <p>@item.Departure.ToString("dd-MM-yyyy")</p>
+            </div>
+        </div>
+    }
+    <div class="br"></div>
+</aside>

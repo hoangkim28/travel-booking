@@ -1,0 +1,98 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using Travel.Authorization
+@inject IAuthorizationService AuthorizationService
+@{
+    ViewData["Title"] = "Danh sách BLog";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section Styles{
+    <link href="~/css/site.css" rel="stylesheet" />
+}
+@section Scripts{
+    <script src="~/app/controller/page/index.js" asp-append-version="true"></script>
+    <script>
+        var pageObj = new PageController();
+        pageObj.initialize();
+    </script>
+}
+<input type="hidden" id="hid-category-id" value="0" />
+    <div class="row">
+        <div class="title_left">
+            <h1 class="text-left h1 text-uppercase">Quản lý PAGE</h1>
+            <hr />
+        </div>
+        <div class="col-md-auto col-sm-auto col-xs-12 form-group pull-left">
+            @if ((await AuthorizationService.AuthorizeAsync(User, "PAGE", Operations.Create)).Succeeded)
+            {
+                <button aria-label="Thêm mới Blog" data-balloon-pos="up" class="btn btn-success" id="btn-create" type="button">Thêm mới <i class="fa fa-plus-square"></i></button>
+            }
+        </div>
+        <div class="col-md-3 col-sm-12 form-group">
+            <select class="form-control" id="ddlCategorySearch">
+                <option>Chọn Danh mục</option>
+            </select>
+        </div>
+        <div class="input-group col-sm-6 col-md-3">
+            <input type="text" id="txt-search-keyword" class="form-control" placeholder="Từ khóa...">
+            <span class="input-group-btn">
+                <button aria-label="Tìm kiếm sản phẩm" data-balloon-pos="up" class="btn btn-primary" id="btn-search" type="button">Tìm</button>
+            </span>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table id="example" class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Alias</th>
+                        <th style="width:80px">Trạng thái</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="tbl-content">
+                </tbody>
+            </table>
+        </div>
+
+        <!--Pagination-->
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="dataTables_info" id="datatable-checkbox_info" role="status" aria-live="polite">
+                    <select id="ddlShowPage" class="md-1">
+                        <option value="10" selected="selected">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <span class="item-per-page">
+                        bản ghi/trang.
+                    </span>
+                    Tổng số bản ghi: <strong id="lblTotalRecords"></strong>
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <div class="dataTables_paginate paging_simple_numbers" id="datatable-checkbox_paginate">
+                    <ul id="paginationUL"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="table-template" type="x-tmpl-mustache">
+    <tr>
+        <td>{{Id}}</td>
+        <td>{{Name}}</td>
+        <td>{{Alias}}</td>
+        <td>{{{Status}}}</td>
+        <td>
+            <a href="#" data-id="{{Id}}" class="btn-edit"><i class="fa fa-pencil-square-o"></i></a>
+            <a href="#" data-id="{{Id}}" class="btn-delete"><i class="fa fa-trash-o"></i></a>
+        </td>
+    </tr>
+</script>
+@Html.Partial("_AddEditModal.cshtml")

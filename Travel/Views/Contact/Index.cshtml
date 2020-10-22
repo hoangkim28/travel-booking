@@ -1,0 +1,138 @@
+﻿@model ContactPageViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+@section Scripts{
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBn9gaKzspPwRtaABhpdtgZnmnkoAxy3ek"></script>
+    <script src="~/client-side/js/controllers/contact/index.js" asp-append-version="true"></script>
+    <script>
+        var contactObj = new ContactController();
+        contactObj.initialize();</script>
+}
+<input type="hidden" id="hidLng" value="@Model.Contact.Lng" />
+<input type="hidden" id="hidLat" value="@Model.Contact.Lat" />
+<input type="hidden" id="hidAddress" value="@Model.Contact.Address" />
+<input type="hidden" id="hidName" value="@Model.Contact.Name" />
+<!-- Start Bradcaump area -->
+<div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(/lib/customer-assets/images/bg/2.jpg) no-repeat scroll center center / cover ;">
+    <div class="ht__bradcaump__wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="bradcaump__inner text-center">
+                        <h2 class="bradcaump-title">Liên hệ</h2>
+                        <nav class="bradcaump-inner">
+                            <a class="breadcrumb-item" href="/">Home</a>
+                            <span class="brd-separetor">/</span>
+                            <span class="breadcrumb-item active">Liên hệ</span>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Bradcaump area -->
+<!-- Start Contact Area -->
+<section class="htc__contact__area ptb--120 bg__white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                <div class="htc__contact__container">
+                    <div class="htc__contact__address">
+                        <h2 class="contact__title">Thông tin liên hệ</h2>
+                        <div class="contact__address__inner">
+                            <!-- Start Single Adress -->
+                            <div class="single__contact__address">
+                                <div class="contact__icon">
+                                    <span class="ti-location-pin"></span>
+                                </div>
+                                <div class="contact__details">
+                                    <p>Địa chỉ Shop : <br> @Model.Contact.Address</p>
+                                </div>
+                            </div>
+                            <!-- End Single Adress -->
+                        </div>
+                        <div class="contact__address__inner">
+                            <!-- Start Single Adress -->
+                            <div class="single__contact__address">
+                                <div class="contact__icon">
+                                    <span class="ti-mobile"></span>
+                                </div>
+                                <div class="contact__details">
+                                    <p> Điện thoại : <br><a href="#">@Model.Contact.Phone </a></p>
+                                </div>
+                            </div>
+                            <!-- End Single Adress -->
+                            <!-- Start Single Adress -->
+                            <div class="single__contact__address">
+                                <div class="contact__icon">
+                                    <span class="ti-email"></span>
+                                </div>
+                                <div class="contact__details">
+                                    <p> Mail :<br><a href="mailto:@Model.Contact.Email">@Model.Contact.Email</a></p>
+                                </div>
+                            </div>
+                            <!-- End Single Adress -->
+                        </div>
+                    </div>
+                    <div class="contact-form-wrap">
+                        <div class="contact-title">
+                            <h2 class="contact__title">Gửi yêu cầu - Liên hệ</h2>
+                        </div>
+                        @if (ViewData["Success"] != null)
+                        {
+
+                            if ((bool)ViewData["Success"] == true)
+                            {
+                                <div class="alert alert-success">
+                                    Chúng tôi đã tiếp nhận liên hệ, phản hồi của bạn. Chúng tôi sẽ liên hệ bạn qua email bạn đã cung cấp. Cảm ơn bạn.
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="alert alert-danger">
+                                    Có lỗi khi gửi, Vui lòng liên hệ 0355 640 750
+                                </div>
+
+                            }
+
+
+                        }
+                        else
+                        {
+                            <form id="contact-form" action="lien-he.html" method="post">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                @Html.AntiForgeryToken()
+                                <div class="single-contact-form">
+                                    <div class="contact-box name">
+                                        <input type="text" asp-for="Feedback.Name" placeholder="Họ tên*">
+                                        <input type="email" asp-for="Feedback.Email" placeholder="Địa chỉ Email*">
+                                    </div>
+                                </div>
+                                <div class="single-contact-form">
+                                    <div class="contact-box message">
+                                        <textarea asp-for="Feedback.Message" placeholder="Nội dung*"></textarea>
+                                    </div>
+                                </div>
+                                <div class="contact-btn">
+                                    <button type="submit" class="fv-btn">SEND</button>
+                                </div>
+                            </form>
+                        }
+                    </div>
+                    <div class="form-output">
+                        <p class="form-messege"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 smt-30 xmt-30">
+                <div class="map-contacts">
+                    <div id="map" style="width:100%;height:500px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Contact Area -->

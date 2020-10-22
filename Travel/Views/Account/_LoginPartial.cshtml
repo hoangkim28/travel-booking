@@ -1,0 +1,24 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Travel.Models
+
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <ul class="nav navbar-nav navbar-right shopping__btn">
+        <li>
+            <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage" class="shp__checkout btn btn-large">Quản lý</a>
+            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
+                <button type="submit" class="shp__checkout btn btn-large">Đăng xuất</button>
+            </form>
+        </li>
+    </ul>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a asp-area="" asp-controller="Account" asp-action="Register">Đăng ký</a></li>
+        <li><a asp-area="" asp-controller="Account" asp-action="Login">Đăng nhập</a></li>
+    </ul>
+}

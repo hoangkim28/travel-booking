@@ -1,0 +1,94 @@
+﻿@using System.Collections.Generic
+@using System.Linq
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Authentication
+@model LoginViewModel
+@inject SignInManager<AppUser> SignInManager
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Responsive Admin Dashboard Template">
+    <meta name="keywords" content="admin,dashboard">
+    <meta name="author" content="skcats">
+    <!-- The above 6 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <!-- Title -->
+    <title>Challange - Đăng nhập hệ thống</title>
+
+    <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link href="~/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/assets/plugins/icomoon/style.css" rel="stylesheet">
+    <link href="~/assets/plugins/uniform/css/default.css" rel="stylesheet" />
+    <link href="~/assets/plugins/switchery/switchery.min.css" rel="stylesheet" />
+    <link href="~/lib/notify-metro.css" rel="stylesheet" />
+    <!-- Theme Styles -->
+    <link href="~/assets/css/ecaps.min.css" rel="stylesheet">
+    <link href="~/assets/css/custom.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+    <!-- Page Container -->
+    <div class="page-container">
+        <!-- Page Inner -->
+        <div class="page-inner">
+            <div id="main-wrapper" class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6 col-md-3 login-box">
+                        <h4 class="login-title">Đăng nhập hệ thống</h4>
+                        <form id="loginForm">
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email</label>
+                                <input type="email" data-required="true" class="form-control" id="txtEmail" name="email">
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Mật khẩu</label>
+                                <input type="password" data-required="true" class="form-control" id="txtPassword" name="password">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <a href="#" class="btn btn-primary" id="btnLogin" accesskey="enter">Đăng nhập</a>
+                            <br />
+                            <a href="#" class="forgot-link">Quên mật khẩu?</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /Page Content -->
+    </div><!-- /Page Container -->
+    <!-- Javascripts -->
+    <script src="~/assets/plugins/jquery/jquery-3.1.0.min.js"></script>
+    <script src="~/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/assets/plugins/uniform/js/jquery.uniform.standalone.js"></script>
+    <script src="~/assets/plugins/switchery/switchery.min.js"></script>
+    <script src="~/assets/js/ecaps.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>>
+    <script src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+    <script src="~/lib/notify.js"></script>
+    <script src="~/lib/notify-metro.js"></script>
+    <script src="~/app/shared/Travel.js"></script>
+    <script src="~/app/controller/login/index.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/localization/messages_vi.js"></script>
+    <script>
+        var login = new loginController();
+        login.initialize();
+    </script>
+</body>
+</html>

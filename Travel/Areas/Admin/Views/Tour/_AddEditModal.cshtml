@@ -1,0 +1,179 @@
+﻿<div id="modal-add-edit" class="bootbox modal fade modal-darkorange in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="bootbox-close-button close text-danger" data-dismiss="modal" aria-hidden="true">X</button>
+            </div>
+            <div class="modal-body">
+                <div id="horizontal-form">
+                    <form class="form-horizontal" role="form" id="frmMaintainance">
+                        <input type="hidden" id="hidIdM" value="0" />
+                        <input type="hidden" id="hidDateCreatedM" value="0" />
+                        <input type="hidden" id="hidViewCountM" value="0" />
+                        <input type="hidden" id="hidLikeM" value="0" />
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">Danh mục</label>
+                            <div class="col-sm-10">
+                                @*<input id="ddlCategoryIdM" required class="form-control" name="ddlCategoryIdM" value="">*@
+                                <select id="ddlCategoryIdM" name="ddlCategoryIdM" class="easyui-combotree" style="width:200px;"
+                                        data-options="required:true">
+                                    Chọn danh mục
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtNameM" class="col-sm-2 control-label no-padding-right">Tên tour</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="txtNameM" required class="form-control" id="txtNameM">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtNameM" class="col-sm-2 control-label no-padding-right">Mã tour</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="txtCodeM" class="form-control" id="txtCodeM">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtDescM" class="col-sm-2 control-label no-padding-right">Giới thiệu tóm tắt</label>
+                            <div class="col-sm-10">
+                                <textarea rows="4" name="txtDescM" class="form-control" id="txtDescM"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label ">Giá</label>
+                            <div class="col-sm-2">
+                                <input type="text" required min="0" name="txtPriceM" class="form-control" id="txtPriceM">
+                            </div>
+                            <label class="col-sm-2 control-label">Giá nhập</label>
+                            <div class="col-sm-2">
+                                <input type="text" required min="0" name="txtOriginalPriceM" class="form-control" id="txtOriginalPriceM">
+                            </div>
+                            <label class="col-sm-2 control-label">Giá khuyến mãi</label>
+                            <div class="col-sm-2">
+                                <input type="text" min="0" name="txtPromotionPriceM" class="form-control" id="txtPromotionPriceM">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtImageM" class="col-sm-2 control-label no-padding-right">Hình ảnh</label>
+
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input name="txtImageM" class="form-control" id="txtImageM" type="hidden" />
+                                    <input type="file" name="fileInputImage" id="fileInputImage" style="display:none" accept="image/*" />
+                                    <span class="input-group-btn">
+                                        <input type="button" id="btnSelectImg" class="btn btn-default" value="Chọn hình" />
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <image id="imageShowM" src="" style="width:250px; height:auto" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label ">Điểm bắt đầu</label>
+                            <div class="col-sm-3">
+                                @*<select name="txtDepartM" title="Địa điểm bắt đầu" required class="form-control" id="txtDepartM"> </select>*@
+                                <select id="txtDepartM" name="txtDepartM" class="easyui-combotree" style="width:230px;"
+                                        data-options="required:true">
+                                    Chọn điểm xuất phát
+                                </select>
+                            </div>
+                            <label class="col-sm-2 control-label">Điểm đến</label>
+                            <div class="col-sm-3">
+                                @*<select name="txtDestinationM" title="Địa điểm đến" required class="form-control" id="txtDestinationM"></select>*@
+                                <select id="txtDestinationM" name="txtDestinationM" class="easyui-combotree" style="width:230px;"
+                                        data-options="required:true">
+                                    Chọn điểm đến
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label ">Ngày đi</label>
+                            <div class="col-sm-3">
+                                <input type="date" title="Ngày khởi hành" required name="txtDepartureM" class="form-control text-center" id="txtDepartureM">
+                            </div>
+                            <label class="col-sm-2 control-label">Số ngày đi</label>
+                            <div class="col-sm-2">
+                                <input type="text" title="Số ngày đi" required min="0" name="txtDurationM" class="form-control" id="txtDurationM">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Số vé</label>
+                            <div class="col-sm-2">
+                                <input type="text" title="Số vế" min="0" name="txtSeatM" class="form-control" id="txtSeatM">
+                            </div>
+                            <div class="col-sm-1">
+                            </div>
+                            <label class="col-sm-2 control-label">Số vé còn lại</label>
+                            <div class="col-sm-2">
+                                <input type="text" min="0" name="txtSeatAvailabilityM" class="form-control" id="txtSeatAvailabilityM">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtContentM" class="col-sm-2 control-label no-padding-right">Nội dung</label>
+                            <div class="col-sm-10">
+                                <textarea id="txtContentM" rows="6" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtMetakeywordM" class="col-sm-2 control-label no-padding-right">SEO title</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="txtSeoPageTitleM" class="form-control" id="txtSeoPageTitleM">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtSeoAliasM" class="col-sm-2 control-label no-padding-right">SEO Url</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="txtSeoAliasM" class="form-control" id="txtSeoAliasM">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtMetakeywordM" class="col-sm-2 control-label no-padding-right">SEO Keywords</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="txtMetakeywordM" class="form-control" id="txtMetakeywordM">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtMetaDescriptionM" class="col-sm-2 control-label no-padding-right">SEO Description</label>
+                            <div class="col-sm-10">
+                                <textarea rows="3" name="txtMetaDescriptionM" class="form-control" id="txtMetaDescriptionM"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtTagM" class="col-sm-2 control-label no-padding-right">Tag (thẻ)</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="txtTagM" class="form-control" id="txtTagM">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="">
+                                    <label class="col-sm-3">
+                                        <input type="checkbox" checked="checked" id="ckStatusM">
+                                        <span class="text"> Hiển thị </span>
+                                    </label>
+                                    <label class="col-sm-3">
+                                        <input type="checkbox" id="ckHotM">
+                                        <span class="text"> Tour HOT </span>
+                                    </label>
+
+                                    <label class="col-sm-3">
+                                        <input type="checkbox" checked="checked" id="ckShowHomeM">
+                                        <span class="text"> Hiện thị trang chủ </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="button" id="btnSave" class="btn btn-success">Lưu thay đổi</button>
+                                <button type="button" id="btnCancel" data-dismiss="modal" class="btn btn-danger">Hủy</button>
+                            </div>
+                        </div>
+                        <br />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

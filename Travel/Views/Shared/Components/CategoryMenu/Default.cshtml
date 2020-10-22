@@ -1,0 +1,39 @@
+﻿@model List<TourCategoryViewModel>
+
+<div class="col-md-3 col-lg-3 col-sm-4 col-xs-12 float-right-style">
+    <div class="categories-menu mrg-xs">
+        <div class="category-heading">
+            <h3> Danh mục sản phẩm</h3>
+        </div>
+        <div class="category-menu-list">
+            <ul>
+                @foreach (var item in Model.Where(x => x.ParentId == null))
+                {
+                    if (Model.Any(x => x.ParentId == item.Id))
+                    {
+                        <li>
+                            <a href="/@item.SeoAlias-c.@(item.Id).html"><img alt="" src="~/lib/customer-assets/images/icons/thum10.png"> @item.Name <i class="zmdi zmdi-chevron-right"></i></a>
+                            <div class="category-menu-dropdown">
+                                <div class="category-part-2 category-common mb--30">
+                                    <h4 class="categories-subtitle"> @item.Name</h4>
+                                    <ul>
+                                        @foreach (var subItem in Model.Where(x => x.ParentId == item.Id))
+                                        {
+                                            <li><a href="/@subItem.SeoAlias-c.@(subItem.Id).html"><span> <img alt="" src="~/lib/customer-assets/images/icons/thum10.png"> @subItem.Name</span></a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li><a href="/@item.SeoAlias-c.@(item.Id).html"><img alt="" src="~/lib/customer-assets/images/icons/thum2.png"> @item.Name</a></li>
+                    }
+
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- End Left Feature -->

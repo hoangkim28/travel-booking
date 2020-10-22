@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Responsive Admin Dashboard Template">
+    <meta name="keywords" content="admin,dashboard">
+    <meta name="author" content="skcats">
+    <!-- The above 6 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <!-- Title -->
+    <title>@ViewData["Title"] - Travelista</title>
+
+    <!-- Styles -->
+    <link href="~/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/assets/plugins/icomoon/style.css" rel="stylesheet">
+    <link href="~/assets/plugins/uniform/css/default.css" rel="stylesheet" />
+    <link href="~/assets/plugins/switchery/switchery.min.css" rel="stylesheet" />
+    <link href="~/assets/plugins/datatables/css/datatables.bootstrap.css" rel="stylesheet" />
+    <link href="~/assets/plugins/switchery/switchery.min.css" rel="stylesheet" />
+    <link href="~/assets/plugins/datatables/css/jquery.datatables.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/datatables/css/jquery.datatables_themeroller.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/ckeditor/skins/moono-lisa/editor.css" rel="stylesheet" />
+    <!-- Theme Styles -->
+    <link href="~/assets/css/ecaps.min.css" rel="stylesheet">
+    @*<link href="~/assets/css/custom.css" rel="stylesheet">*@
+
+    <!-- Tooltips - Ballon -->
+    <link href="~/lib/balloon/balloon.css" rel="stylesheet" />
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    @RenderSection("Styles", required: false)
+    <link href="~/lib/semantic.min.css" rel="stylesheet" />
+</head>
+<body class="page-sidebar-fixed page-sidebar-collapsed">
+
+    <!-- Page Container -->
+    <div class="page-container">
+        <!-- Page Sidebar -->
+        @await Component.InvokeAsync("SideBar")
+        <!-- /Page Sidebar -->
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="search-form">
+                    <form action="#" method="GET">
+                        <div class="input-group">
+                            <input type="text" name="txtKeyword" class="form-control search-input" placeholder="Type something...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" id="btnSearch" type="button"><i class="icon-search"></i></button>
+                                <button class="btn btn-default" id="close-search" type="button"><i class="icon-close"></i></button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+                        <!-- Brand and toggle get grouped for better mobile display -->
+                        <div class="navbar-header">
+                            <div class="logo-sm">
+                                <a href="javascript:void(0)" id="sidebar-toggle-button"><i class="fa fa-bars"></i></a>
+                                <a class="logo-box" href="/admin"><span>TRAVELISTA.COM.VN</span></a>
+                            </div>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                                <i class="fa fa-angle-down"></i>
+                            </button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav">
+                                <li><a href="javascript:void(0)" id="collapsed-sidebar-toggle-button"><i class="fa fa-bars"></i></a></li>
+                                <li><a href="javascript:void(0)" id="toggle-fullscreen"><i class="fa fa-expand"></i></a></li>
+                            </ul>
+                            @await Html.PartialAsync("_LoginPartial")
+                        </div><!-- /.navbar-collapse -->
+                    </div><!-- /.container-fluid -->
+                </nav>
+            </div><!-- /Page Header -->
+            <!-- Page Inner -->
+            <div class="page-inner">
+                <div class="page-title">
+
+                </div>
+                <div id="main-wrapper">
+                    @RenderBody()
+                    <!-- Row -->
+                </div>
+            </div><!-- /Page Inner -->
+            <div class="page-right-sidebar" id="main-right-sidebar">
+                <div class="page-right-sidebar-inner">
+                    <div class="page-sidebar-menu">
+                        @await Html.PartialAsync("_LoginPartial")
+                    </div>
+                    <a href="javascript:void(0)" class="right-sidebar-toggle right-sidebar-close" data-sidebar-id="main-right-sidebar"><i class="icon-close"></i></a>
+                </div>
+            </div>
+        </div>
+    </div><!-- /Page Content -->
+    <!-- /Page Container -->
+    <!-- Javascripts -->
+    <script src="~/assets/plugins/jquery/jquery-3.1.0.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/assets/plugins/uniform/js/jquery.uniform.standalone.js"></script>
+    <script src="~/assets/plugins/switchery/switchery.min.js"></script>
+    <script src="~/lib/bootbox.js"></script>
+    <script src="~/js/mustache.js"></script>
+    <script src="~/lib/jquery.twbsPagination.js"></script>
+    <script src="~/assets/js/ecaps.min.js"></script>
+    <script src="~/lib/notify.js"></script>
+    <script src="~/lib/notify-metro.js"></script>
+    <script src="~/lib/ckeditor/ckeditor.js"></script>
+    <script src="~/app/shared/travel.js"></script>
+    <script src="~/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
+    <script type="text/javascript">
+        var mzOptions = {};
+    </script>
+    <script>
+        jQuery.extend(jQuery.validator.messages, {
+            required: "Không được để trống.",
+            remote: "Please fix this field.",
+            email: "Vui lòng nhập đúng email.",
+            url: "Please enter a valid URL.",
+            date: "Please enter a valid date.",
+            dateISO: "Please enter a valid date (ISO).",
+            number: "Please enter a valid number.",
+            digits: "Please enter only digits.",
+            creditcard: "Please enter a valid credit card number.",
+            equalTo: "Please enter the same value again.",
+            accept: "Please enter a value with a valid extension.",
+            maxlength: jQuery.validator.format("Độ dài tối đa  {0} ký tự ."),
+            minlength: jQuery.validator.format("Độ dài tối thiểu {0} ký tựs."),
+            rangelength: jQuery.validator.format("Please enter a value between {0} and {1} characters long."),
+            range: jQuery.validator.format("Vui long nhập trong khoảng {0} đến {1}."),
+            max: jQuery.validator.format("Vui lòng nhập dưới {0}."),
+            min: jQuery.validator.format("Vui lòng nhập trên {0}.")
+        });
+    </script>
+    @*<script src="~/admin-side/js/custom.js"></script>*@
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

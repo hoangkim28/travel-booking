@@ -1,0 +1,219 @@
+﻿@model Travel.Models.TourViewModels.SearchResultViewModel
+@{
+    ViewData["Title"] = Model.Keyword;
+}
+@section Scripts{
+    <script src="~/lib/notify.js"></script>
+    <script src="~/app/shared/travel.js"></script>
+    <script src="~/client-side/js/controllers/home/index.js"></script>
+    <script>
+        var home = new HomeController();
+        home.initialize();
+    </script>
+}
+<!-- Breadcrumbs -->
+<!--================ Start banner section =================-->
+<section class="home-banner-area relative">
+    <div class="container-fluid">
+        <div class="row d-flex align-items-center justify-content-center">
+            <div class="header-right col-lg-6 col-md-6">
+                <h1>
+                    Tìm kiếm
+                </h1>
+                <p class="pt-20">
+                    Tìm kiếm bằng các từ khóa về tên, nơi đến,...
+                </p>
+                <a href="#" class="main_btn">
+                    Xem ngay
+                    <img src="~/client-assets/img/next.png" alt="">
+                </a>
+            </div>
+
+            <div class="col-lg-6 col-md-6 header-left">
+                <div class="">
+                    <img class="img-fluid w-100" src="~/client-assets/img/banner/banner-img.jpg" alt="">
+                </div>
+                <div class="video-popup d-flex align-items-center">
+                    <a class="play-video video-play-button animate" href="https://www.youtube.com/watch?v=KUln2DXU5VE"
+                       data-animate="zoomIn" data-duration="1.5s" data-delay="0.1s">
+                        <span></span>
+                    </a>
+                    <div class="watch">
+                        <h5>Watch Intro Video</h5>
+                        <p>You will love our execution</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================ End banner section =================-->
+<!--================Blog Area =================-->
+<section class="blog_area section_gap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+            </div>
+            <div class="col-lg-4">
+                <form action="tim-kiem.html" method="get">
+
+                    <div class="form-row">
+                        <div class="col">
+                            <a class="filter__menu" href="#">Sắp xếp theo:</a>
+                            <br />
+                            <select class="form-control" name="sortBy" asp-for="SortType"
+                                    onchange="this.form.submit()" asp-items="Model.SortTypes"></select>
+                        </div>
+                        <div class="col">
+                            <a class="filter__menu" href="#">Hiển thị</a>
+                            <br />
+                            <select class="form-control" name="pageSize" asp-for="PageSize" onchange="this.form.submit()"
+                                    asp-items="Model.PageSizes"></select>
+                        </div>
+                    </div>
+                </form>
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="blog_left_sidebar">
+                    @if (Model.Data.Results.Count <= 0)
+                    {
+
+                        <article class="row blog_item">
+                            <div class="col-md-4">
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="blog_post">
+                                    <h2 class="text-info">Không tìm thấy tour phù hợp với từ khóa: @Model.Keyword</h2>
+                                </div>
+                            </div>
+                        </article>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model.Data.Results)
+                        {
+                            <article class="row blog_item">
+                                <div class="col-md-4">
+                                    <div class="blog_info text-right">
+                                        <ul class="blog_meta list">
+                                            <li><a href="#" title="Ngày đi">Ngày đi: @item.Departure.ToString("dd-MM-yyyy")<i class="lnr lnr-calendar-full"></i></a></li>
+                                            <li><a href="#">Sô ngày đi: @item.Duration<i class="lnr lnr-eye"></i></a></li>
+                                            <li><a href="#">Lượt xem: @string.Format("{0:#,0.00}", item.ViewCount)<i class="lnr lnr-eye"></i></a></li>
+                                            <li><a href="#"> Vé còn: @item.SeatAvailability<i class="lnr lnr-eye"></i></a></li>
+                                            <li><a href="#"> Giá: @item.Price.ToString("#,###") đ<i class="lnr lnr-eye"></i></a></li>
+
+                                            @if (item.PromotionPrice == 0 || item.PromotionPrice == null)
+                                            {
+                                                @if (item.HotFlag == true)
+                                                {
+                                                    <li><a href="#">HOT<i class="lnr lnr-heart-pulse"></i></a></li>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <li><a href="#"> Giá KM: @String.Format("{0:N0}", item.PromotionPrice) đ<i class="lnr lnr-eye"></i></a></li>
+                                                <li><a href="#">Giảm @(100 - (int)((item.PromotionPrice / item.Price) * 100))%<i class="lnr lnr-heart-pulse"></i></a></li>
+                                            }
+
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="blog_post">
+                                        <a href="/@item.SeoAlias-p.@(item.Id).html">
+                                            <img src="@item.Image" alt="">
+                                        </a>
+                                        <div class="blog_details">
+                                            <a href="/@item.SeoAlias-p.@(item.Id).html">
+                                                <h2>@item.Name</h2>
+                                            </a>
+                                            <p>
+                                                @item.Description
+                                            </p>
+                                            <a href="/@item.SeoAlias-p.@(item.Id).html" class="blog_btn" title="Xem chi tiết"><i class="fa fa-info-circle"></i></a>
+                                            <a href="#" class="blog_btn btnAddToCart" data-id="@item.Id" title="Thêm giỏ hàng"><i class="fa fa-shopping-bag"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        }
+                        @(await Component.InvokeAsync("Pager", Model.Data))
+                    }
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="blog_right_sidebar">
+                    <aside class="single_sidebar_widget search_widget">
+                        <form class="input-group" action="/tim-kiem.html" method="post">
+                            <input name="keyword" value="@ViewData["keyword"]" type="text" class="form-control" placeholder="Tìm kiếm" title="Điểm đến, ngày đi, loại tour...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit"><i class="lnr lnr-magnifier"></i></button>
+                            </span>
+                        </form><!-- /input-group -->
+                        <div class="br"></div>
+                    </aside>
+                    <aside class="single_sidebar_widget popular_post_widget">
+                        <h3 class="widget_title">Popular Posts</h3>
+                        <div class="media post_item">
+                            <img src="~/client-assets/img/blog/popular-post/post1.jpg" alt="post">
+                            <div class="media-body">
+                                <a href="single-blog.html">
+                                    <h3>Space The Final Frontier</h3>
+                                </a>
+                                <p>02 Hours ago</p>
+                            </div>
+                        </div>
+                        <div class="media post_item">
+                            <img src="~/client-assets/img/blog/popular-post/post2.jpg" alt="post">
+                            <div class="media-body">
+                                <a href="single-blog.html">
+                                    <h3>The Amazing Hubble</h3>
+                                </a>
+                                <p>02 Hours ago</p>
+                            </div>
+                        </div>
+                        <div class="media post_item">
+                            <img src="~/client-assets/img/blog/popular-post/post3.jpg" alt="post">
+                            <div class="media-body">
+                                <a href="single-blog.html">
+                                    <h3>Astronomy Or Astrology</h3>
+                                </a>
+                                <p>03 Hours ago</p>
+                            </div>
+                        </div>
+                        <div class="media post_item">
+                            <img src="~/client-assets/img/blog/popular-post/post4.jpg" alt="post">
+                            <div class="media-body">
+                                <a href="single-blog.html">
+                                    <h3>Asteroids telescope</h3>
+                                </a>
+                                <p>01 Hours ago</p>
+                            </div>
+                        </div>
+                        <div class="br"></div>
+                    </aside>
+                    <aside class="single_sidebar_widget ads_widget">
+                        <a href="#"><img class="img-fluid" src="~/client-assets/img/blog/add.jpg" alt=""></a>
+                        <div class="br"></div>
+                    </aside>
+                    <vc:category-menu-side-bar></vc:category-menu-side-bar>
+                    <aside class="single-sidebar-widget tag_cloud_widget">
+                        <h4 class="widget_title">Tag Clouds</h4>
+                        <ul class="list">
+                            @foreach (var item in Model.Categories)
+                            {
+                                <li><a href="/@item.SeoAlias-c.@(item.Id).html">@item.Name</a></li>
+                            }
+                        </ul>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@Html.Partial("_TourDetail.cshtml")
+

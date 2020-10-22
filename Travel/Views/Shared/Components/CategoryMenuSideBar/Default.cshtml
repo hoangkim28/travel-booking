@@ -1,0 +1,11 @@
+﻿@model List<TourCategoryViewModel>
+
+<aside class="single-sidebar-widget tag_cloud_widget">
+    <h4 class="widget_title">Địa điểm nổi bật</h4>
+    <ul class="list">
+        @foreach (var item in Model.Where(x => x.ParentId == null))
+        {
+            <li><a href="/@item.SeoAlias-c.@(item.Id).html" class="main_btn">@item.Name</a></li>
+        }
+    </ul>
+</aside>

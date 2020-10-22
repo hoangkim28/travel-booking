@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Confirm email";
+}
+<!-- Breadcrumbs -->
+<!-- Breadcrumbs End -->
+<!-- Main Container -->
+<section class="main-container col1-layout">
+    <div class="main container">
+        <div class="page-content">
+            <div class="account-login">
+                <div class="col-md-3 col-sm-2"></div>
+                <div class="col-md-6 col-sm-8">
+                    <div>
+                        <h3 class="h3">
+                            Cảm ơn bạn. Bạn đã đăng ký thành công.
+                        </h3>
+                        <hr />
+                        <a class="btn btn-sm btn-success" asp-controller="home" asp-action="index">Chọn ngay một tour nào!!!</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Main Container End -->
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

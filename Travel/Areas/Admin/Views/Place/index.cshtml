@@ -1,0 +1,108 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using Travel.Authorization
+@inject IAuthorizationService AuthorizationService
+
+@{
+    ViewData["Title"] = "Danh sách BLog";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles{
+    <link href="~/css/site.css" rel="stylesheet" />
+}
+@section Scripts{
+    <script src="~/app/controller/place/index.js" asp-append-version="true"></script>
+    <script>
+        var placeObj = new PlaceController();
+        placeObj.initialize();
+    </script>
+}
+<div>
+    <div class="row">
+        <div class="title_left">
+            <h1 class="text-center h1 text-uppercase">Quản lý Địa điểm</h1>
+            <hr />
+            <div class="col-md-auto col-sm-auto col-xs-12 form-group pull-left">
+                @{
+                    var result = await AuthorizationService.AuthorizeAsync(User, "PLACE", Operations.Create);
+                }
+                @if (result.Succeeded)
+                {
+                    <button aria-label="Thêm mới người dùng" data-balloon-pos="up" class="btn btn-success" id="btn-create" type="button">Thêm mới</button>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_content">
+                    <div class="input-group col-md-5 form-group">
+                        <input type="text" id="txt-search-keyword" class="form-control" placeholder="Từ khóa...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" id="btn-search" type="button">Tìm</button>
+                        </span>
+                    </div>
+                    <table id="example" class="table table-bordered">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên địa điểm</th>
+                                <th>Hình ảnh</th>
+                                <th>Ngày cập nhật</th>
+                                <th style="width:80px">Trạng thái</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbl-content">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!--Pagination-->
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div class="dataTables_info" id="datatable-checkbox_info" role="status" aria-live="polite">
+                            <select id="ddlShowPage" class="md-1">
+                                <option value="10" selected="selected">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span class="item-per-page">
+                                bản ghi/trang.
+                            </span>
+                            Tổng số bản ghi: <strong id="lblTotalRecords"></strong>
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="datatable-checkbox_paginate">
+                            <ul id="paginationUL"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="table-template" type="x-tmpl-mustache">
+    <tr>
+        <td>{{Id}}</td>
+        <td>{{Name}}</td>
+        <td class="text-center">{{{Image}}}</td>
+        <td class="text-center">{{DateModified}}</td>
+        <td>{{{Status}}}</td>
+        <td class="text-center">
+            @if ((await AuthorizationService.AuthorizeAsync(User, "PLACE", Operations.Update)).Succeeded)
+            {
+                <button aria-label="Cập nhật thông tin địa điểm này" data-balloon-pos="up" data-id="{{Id}}" class="btn btn-default btn-sm btn-edit"><i class="fa fa-pencil-square-o"></i></button>
+            }
+            @if ((await AuthorizationService.AuthorizeAsync(User, "PLACE", Operations.Delete)).Succeeded)
+            {
+                <button aria-label="Xóa địa điểm này" data-balloon-pos="up" data-id="{{Id}}" class="btn btn-danger btn-sm btn-delete"><i class="fa fa-trash-o"></i></button>
+            }
+        </td>
+    </tr>
+</script>
+@Html.Partial("_AddEditModal.cshtml")

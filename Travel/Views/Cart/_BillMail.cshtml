@@ -1,0 +1,121 @@
+﻿<style>
+    body {
+        background-color: #000
+    }
+
+    .padding {
+        padding: 2rem !important
+    }
+
+    .card {
+        margin-bottom: 30px;
+        border: none;
+        -webkit-box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
+        -moz-box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
+        box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22)
+    }
+
+    .card-header {
+        background-color: #fff;
+        border-bottom: 1px solid #e6e6f2
+    }
+
+    h3 {
+        font-size: 20px
+    }
+
+    h5 {
+        font-size: 15px;
+        line-height: 26px;
+        color: #3d405c;
+        margin: 0px 0px 15px 0px;
+        font-family: 'Circular Std Medium'
+    }
+
+    .text-dark {
+        color: #3d405c !important
+    }
+    table {
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+    th, td {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+    }
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+</style>
+
+@model Travel.Models.CheckoutViewModel
+
+
+<div class="offset-xl-2 col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12 padding">
+    <div class="card">
+        <div class="card-header p-4">
+            <a class="pt-2 d-inline-block" href="https://localhost:44344/" data-abc="true">travel.com.vn</a>
+            <div class="float-right">
+                <h3 class="mb-0">THÔNG BÁO ĐẶT HÀNG</h3>
+            </div>
+        </div>
+        <div class="card-body">
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tên Tour</th>
+                            <th class="right">Giá</th>
+                            <th class="center">Số lượng</th>
+                            <th class="right">Tổng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            decimal totalAmount = 0;
+                        }
+                        @foreach (var item in Model.BillDetails)
+                        {
+                            <tr>
+                                <td class="left strong">@item.Tour.Name</td>
+                                <td class="right">@String.Format("{0:N0}", item.Price) đ</td>
+                                <td class="center">@item.Quantity</td>
+                                <td class="right">
+                                    @{
+                                        var a = item.Price;
+                                        var b = item.Quantity;
+                                        var c = item.Price * item.Quantity;
+                                    }
+                                    @String.Format("{0:N0}", c) đ
+                                </td>
+                            </tr>
+                            totalAmount += item.Price * item.Quantity;
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-sm-5">
+                </div>
+                <div class="col-lg-4 col-sm-5 ml-auto">
+                    <table class="table table-clear">
+                        <tbody>
+                            <tr>
+                                <td class="left">
+                                    <strong class="text-dark">Tổng</strong>
+                                </td>
+                                <td class="right">
+                                    <strong class="text-dark">@String.Format("{0:N0}",totalAmount) đ</strong>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

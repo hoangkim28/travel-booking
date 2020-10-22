@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Lịch sữ đặt hàng";
+    ViewData.AddActivePage(ManageNavPages.History);
+}
+@section Scripts{
+    <script src="~/app/shared/travel.js"></script>
+    <script src="~/js/mustache.js"></script>
+    <script src="~/client-side/js/controllers/updateprofile/index.js" asp-append-version="true"></script>
+    <script>
+        var obj = new UpdateprofileController();
+        obj.initialize();
+    </script>
+}
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Mã</th>
+                    <th>Ngày đặt</th>
+                    <th>Phương thức thanh toán</th>
+                    <th>Trạng thái</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tbl-content">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script id="table-template" type="x-tmpl-mustache">
+    <tr>
+        <td>#{{Id}}</td>
+        <td>{{{DateCreated}}}</td>
+        <td>{{{PaymentMethod}}}</td>
+        <td>{{{BillStatus}}}</td>
+        <td class="text-center"><a href="/don-hang-{{Id}}.html">Xem</a></td>
+    </tr>
+</script>
