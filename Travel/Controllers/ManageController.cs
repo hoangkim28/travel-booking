@@ -194,7 +194,7 @@ namespace Travel.Controllers
             var email = user.Email;
             await _emailSender.SendEmailConfirmationAsync(email, callbackUrl);
 
-            StatusMessage = "Verification email sent. Please check your email.";
+            StatusMessage = "Email xác thực đã gửi. Vui lòng kiễm tra.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -220,6 +220,7 @@ namespace Travel.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("doi-mat-khau.html", Name = "ChangePassword")]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -242,7 +243,7 @@ namespace Travel.Controllers
 
             await _signInManager.SignInAsync(user, isPersistent: false);
             _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            StatusMessage = "Thay đổi mật khẩu thành công.";
 
             return RedirectToAction(nameof(ChangePassword));
         }
@@ -290,7 +291,7 @@ namespace Travel.Controllers
             }
 
             await _signInManager.SignInAsync(user, isPersistent: false);
-            StatusMessage = "Your password has been set.";
+            StatusMessage = "Đặt mật khẩu thành công.";
 
             return RedirectToAction(nameof(SetPassword));
         }
@@ -351,7 +352,7 @@ namespace Travel.Controllers
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            StatusMessage = "The external login was added.";
+            StatusMessage = "Thông tin đăng nhập bên ngoài đã được thêm vào.";
             return RedirectToAction(nameof(ExternalLogins));
         }
 
