@@ -30,7 +30,7 @@ namespace Travel.Controllers
         public IActionResult Index()
         {
             var homeVm = new HomeViewModel();
-            homeVm.HomeCategories = (System.Collections.Generic.List<TourCategoryViewModel>)_mapper.ProjectTo<TourCategoryViewModel>((System.Linq.IQueryable)_TourCategoryService.GetHomeCategories());
+            homeVm.HomeCategories = _TourCategoryService.GetHomeCategories();
             homeVm.HotTours = _TourService.GetHotTour(6);
             homeVm.TopSellTours = _TourService.GetLastest(6);
             homeVm.LastestBlogs = _blogService.GetLastest(6);

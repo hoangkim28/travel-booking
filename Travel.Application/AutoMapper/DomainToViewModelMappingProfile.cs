@@ -11,7 +11,7 @@ namespace Travel.Application.AutoMapper
     {
         public DomainToViewModelMappingProfile()
         {
-            CreateMap<TourCategoryViewModel, TourCategory>();
+            CreateMap<TourCategory, TourCategoryViewModel>();
             CreateMap<Tour, TourViewModel>();
             CreateMap<Blog, BlogViewModel>();
             CreateMap<Function, FunctionViewModel>();

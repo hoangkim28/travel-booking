@@ -2,12 +2,8 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
-    "iis": {
-      "applicationUrl": "http://localhost/Travel",
-      "sslPort": 0
-    },
     "iisExpress": {
-      "applicationUrl": "http://localhost:56851/",
+      "applicationUrl": "https://localhost:3000/",
       "sslPort": 44344
     }
   },
@@ -15,11 +11,10 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "https://localhost:44344/",
+      "launchUrl": "https://localhost:3000/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "nativeDebugging": true
+      }
     },
     "Travel": {
       "commandName": "Project",
@@ -27,7 +22,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:56852/"
+      "applicationUrl": "https://localhost:3000/"
     }
   }
 }

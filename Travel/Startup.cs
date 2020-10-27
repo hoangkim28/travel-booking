@@ -26,6 +26,10 @@ using System;
 using Travel.Application.AutoMapper;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Azure;
+using Azure.Storage.Queues;
+using Azure.Storage.Blobs;
+using Azure.Core.Extensions;
 
 namespace Travel
 {
@@ -71,28 +75,28 @@ namespace Travel
                 options.IdleTimeout = TimeSpan.FromHours(2);
                 options.Cookie.HttpOnly = true;
             });
-            services.AddAutoMapper(typeof(Startup));
-            services.AddAuthentication();
-                //.AddFacebook(fbOpts =>{
-                //    fbOpts.AppId = "267936951066928";
-                //    fbOpts.AppSecret = "fa69478bd4daf33a3788efa030c30e0f";
-                //})
-                //.AddGoogle(ggOpts => {
-                //    ggOpts.ClientId = "355246919990-n6ce34beeg5oj9rce2pm9sae8cvv1osq.apps.googleusercontent.com";
-                //    ggOpts.ClientSecret = "vvvJxH5FhWMxnZOIhlwLTfD8";
-                //});
-            // Add application services.
+            services.AddSingleton(AutoMapperConfig.RegisterMappings().CreateMapper());
+            //services.AddAuthentication()
+            //    .AddFacebook(fbOpts =>
+            //     {
+            //         fbOpts.AppId = "267936951066928";
+            //         fbOpts.AppSecret = "fa69478bd4daf33a3788efa030c30e0f";
+            //     })
+            //    .AddGoogle(ggOpts =>
+            //    {
+            //        ggOpts.ClientId = "355246919990-n6ce34beeg5oj9rce2pm9sae8cvv1osq.apps.googleusercontent.com";
+            //        ggOpts.ClientSecret = "vvvJxH5FhWMxnZOIhlwLTfD8";
+            //    });
+            //// Add application services.
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<RoleManager<AppRole>, RoleManager<AppRole>>();
 
-            services.AddSingleton(AutoMapperConfig.RegisterMappings().CreateMapper());
             services.AddControllers()
                     .AddJsonOptions(options =>
                     {
                         options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
                         options.JsonSerializerOptions.PropertyNamingPolicy = null;
                     });
-            services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
 
             services.AddTransient<IEmailSender, EmailSender>();
 
@@ -168,8 +172,6 @@ namespace Travel
                 });
 
             services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -211,6 +213,31 @@ namespace Travel
                     "areaRoute",
                     "{area:exists}/{controller=Login}/{action=Index}/{id?}");
             });
+        }
+    }
+    internal static class StartupExtensions
+    {
+        public static IAzureClientBuilder<BlobServiceClient, BlobClientOptions> AddBlobServiceClient(this AzureClientFactoryBuilder builder, string serviceUriOrConnectionString, bool preferMsi)
+        {
+            if (preferMsi && Uri.TryCreate(serviceUriOrConnectionString, UriKind.Absolute, out Uri serviceUri))
+            {
+                return builder.AddBlobServiceClient(serviceUri);
+            }
+            else
+            {
+                return builder.AddBlobServiceClient(serviceUriOrConnectionString);
+            }
+        }
+        public static IAzureClientBuilder<QueueServiceClient, QueueClientOptions> AddQueueServiceClient(this AzureClientFactoryBuilder builder, string serviceUriOrConnectionString, bool preferMsi)
+        {
+            if (preferMsi && Uri.TryCreate(serviceUriOrConnectionString, UriKind.Absolute, out Uri serviceUri))
+            {
+                return builder.AddQueueServiceClient(serviceUri);
+            }
+            else
+            {
+                return builder.AddQueueServiceClient(serviceUriOrConnectionString);
+            }
         }
     }
 }
