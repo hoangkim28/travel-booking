@@ -28,7 +28,7 @@ namespace Travel.Application.Interfaces
 
         void ReOrder(int sourceId, int targetId);
 
-        List<TourCategoryViewModel> GetHomeCategories(int top);
+        List<TourCategoryViewModel> GetHomeCategories();
 
         void Save();
     }

@@ -8,6 +8,7 @@ namespace Travel.Data.Entities
     public class Footer : DomainEntity<string>
     {
         [Required]
+        [MaxLength(4000)]
         public string Content { set; get; }
     }
 }

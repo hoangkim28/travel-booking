@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Travel.Infrastructure.SharedKernel;
 
 namespace Travel.Data.Entities
@@ -7,7 +8,7 @@ namespace Travel.Data.Entities
     public class BlogTag : DomainEntity<int>
     {
         public int BlogId { set; get; }
-
+        [MaxLength(50)]
         public string TagId { set; get; }
 
         [ForeignKey("BlogId")]

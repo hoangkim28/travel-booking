@@ -12,13 +12,16 @@ namespace Travel.Data.Entities
         public string Name { set; get; }
 
         [StringLength(255)]
+        [MaxLength(255)]
         public string Description { set; get; }
 
         [StringLength(255)]
+        [MaxLength(255)]
         [Required]
         public string Image { set; get; }
 
         [StringLength(255)]
+        [MaxLength(255)]
         public string Url { set; get; }
 
         public int? DisplayOrder { set; get; }

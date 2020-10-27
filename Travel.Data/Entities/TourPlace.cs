@@ -29,6 +29,7 @@ namespace Travel.Data.Entities
         public int Depart { get; set; }
         public int Destination { get; set; }
         [StringLength(255)]
+        [MaxLength(255)]
         public string OrtherPlace { get; set; }
         [ForeignKey("Depart")]
         public virtual Place DepartFrom { set; get; }

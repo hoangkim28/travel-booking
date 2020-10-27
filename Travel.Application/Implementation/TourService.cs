@@ -29,11 +29,12 @@ namespace Travel.Application.Implementation
         private ITourImageRepository _TourImageRepository;
         private IUnitOfWork _unitOfWork;
         private IBillDetailRepository _billDetailRepository;
+        private readonly IMapper _mapper;
 
         public TourService(ITourRepository TourRepository,
             ITagRepository tagRepository,
             IUnitOfWork unitOfWork, ITourImageRepository TourImageRepository, ITourPlaceRepository TourPlaceRepository, IBillDetailRepository billDetailRepository,
-        ITourTagRepository TourTagRepository)
+        ITourTagRepository TourTagRepository, IMapper mapper)
         {
             _TourRepository = TourRepository;
             _tagRepository = tagRepository;
@@ -42,6 +43,7 @@ namespace Travel.Application.Implementation
             _TourImageRepository = TourImageRepository;
             _unitOfWork = unitOfWork;
             _billDetailRepository = billDetailRepository;
+            _mapper = mapper;
         }
 
         public void Dispose()
@@ -51,24 +53,24 @@ namespace Travel.Application.Implementation
 
         public List<TourViewModel> GetAll()
         {
-            return _TourRepository.FindAll(x => x.TourCategory).ProjectTo<TourViewModel>().ToList();
+            return _mapper.ProjectTo<TourViewModel>(_TourRepository.FindAll(x => x.TourCategory)).ToList();
         }
 
         public List<TourViewModel> GetListToExport(int? categoryId, string keyword, int page, int pageSize)
         {
-            var query = _TourRepository.FindAll();
+            var query = _mapper.ProjectTo<TourViewModel>(_TourRepository.FindAll());
             if (!string.IsNullOrEmpty(keyword))
                 query = query.Where(x => x.Name.Contains(keyword));
             if (categoryId.HasValue)
                 query = query.Where(x => x.CategoryId == categoryId.Value);
-            var data = query.ProjectTo<TourViewModel>().ToList();
+            var data = query.ToList();
             return data;
         }
 
         public PagedResult<TourViewModel> GetAllPaging(int? categoryId, string keyword, int page, int pageSize)
         {
             // var query = _TourRepository.FindAll(x => x.Status == Status.Active);
-            var query = _TourRepository.FindAll();
+            var query = _mapper.ProjectTo<TourViewModel>(_TourRepository.FindAll());
             if (!string.IsNullOrEmpty(keyword))
                 query = query.Where(x => x.Name.Contains(keyword));
             if (categoryId.HasValue)
@@ -79,7 +81,7 @@ namespace Travel.Application.Implementation
             query = query.OrderByDescending(x => x.DateModified)
                 .Skip((page - 1) * pageSize).Take(pageSize);
 
-            var data = query.ProjectTo<TourViewModel>().ToList();
+            var data = query.ToList();
 
             var paginationSet = new PagedResult<TourViewModel>()
             {
@@ -93,7 +95,7 @@ namespace Travel.Application.Implementation
         }
         public PagedResult<TourViewModel> GetAllPagingHome(int? categoryId, string keyword, int page, int pageSize)
         {
-            var query = _TourRepository.FindAll().Where(x => x.Status == Status.Active);
+            var query = _mapper.ProjectTo<TourViewModel>(_TourRepository.FindAll().Where(x => x.Status == Status.Active));
             if (!string.IsNullOrEmpty(keyword))
                 query = query.Where(x => x.Name.Contains(keyword));
             if (categoryId.HasValue)
@@ -104,7 +106,7 @@ namespace Travel.Application.Implementation
             query = query.OrderByDescending(x => x.DateModified)
                 .Skip((page - 1) * pageSize).Take(pageSize);
 
-            var data = query.ProjectTo<TourViewModel>().ToList();
+            var data = query.ToList();
 
             var paginationSet = new PagedResult<TourViewModel>()
             {
@@ -118,7 +120,7 @@ namespace Travel.Application.Implementation
         }
         public PagedResult<TourViewModel> GetCollection(string type, int page, int pageSize)
         {
-            var query = _TourRepository.FindAll().Where(x => x.Status == Status.Active);
+            var query = _mapper.ProjectTo<TourViewModel>(_TourRepository.FindAll().Where(x => x.Status == Status.Active));
             
             if(!string.IsNullOrEmpty(type) || type != Collection.Hot || type != Collection.Lastest || type != Collection.Newest)
             {
@@ -142,7 +144,7 @@ namespace Travel.Application.Implementation
             query = query.OrderByDescending(x => x.DateModified)
                 .Skip((page - 1) * pageSize).Take(pageSize);
 
-            var data = query.ProjectTo<TourViewModel>().ToList();
+            var data = query.ToList();
 
             var paginationSet = new PagedResult<TourViewModel>()
             {
@@ -188,7 +190,7 @@ namespace Travel.Application.Implementation
                     TourTags.Add(TourTag);
                 }
             }
-            var Tour = Mapper.Map<TourViewModel, Tour>(TourVm);
+            var Tour = _mapper.Map<TourViewModel, Tour>(TourVm);
             foreach (var TourTag in TourTags)
             {
                 Tour.TourTags.Add(TourTag);
@@ -221,7 +223,7 @@ namespace Travel.Application.Implementation
 
         public TourViewModel GetById(int id)
         {
-            return Mapper.Map<Tour, TourViewModel>(_TourRepository.FindById(id));
+            return _mapper.Map<Tour, TourViewModel>(_TourRepository.FindById(id));
         }
 
         public void Save()
@@ -259,7 +261,7 @@ namespace Travel.Application.Implementation
                     TourTags.Add(TourTag);
                 }
             }
-            var Tour = Mapper.Map<TourViewModel, Tour>(TourVm);
+            var Tour = _mapper.Map<TourViewModel, Tour>(TourVm);
             if (Tour.PromotionPrice == null)
             {
                 Tour.PromotionPrice = 0;
@@ -363,8 +365,7 @@ namespace Travel.Application.Implementation
 
         public List<TourImageViewModel> GetImages(int TourId)
         {
-            return _TourImageRepository.FindAll(x => x.TourId == TourId)
-                .ProjectTo<TourImageViewModel>().ToList();
+            return _mapper.ProjectTo<TourImageViewModel>(_TourImageRepository.FindAll(x => x.TourId == TourId)).ToList();
         }
 
         public void AddImages(int TourId, string[] images)
@@ -383,36 +384,33 @@ namespace Travel.Application.Implementation
 
         public List<TourViewModel> GetLastest(int top)
         {
-            return _TourRepository.FindAll(x => x.Status == Status.Active).OrderByDescending(x => x.DateModified)
-                .Take(top).ProjectTo<TourViewModel>().ToList();
+            return _mapper.ProjectTo<TourViewModel>(_TourRepository.FindAll(x => x.Status == Status.Active).OrderByDescending(x => x.DateModified)
+                .Take(top)).ToList();
         }
 
         public List<TourViewModel> GetHotTour(int top)
         {
-            return _TourRepository.FindAll(x => x.Status == Status.Active && x.HotFlag == true)
+            return _mapper.ProjectTo<TourViewModel>(_TourRepository.FindAll(x => x.Status == Status.Active && x.HotFlag == true)
                 .OrderByDescending(x => x.DateModified)
-                .Take(top)
-                .ProjectTo<TourViewModel>()
+                .Take(top))
                 .ToList();
         }
 
         public List<TourViewModel> GetRelatedTours(int id, int top)
         {
             var Tour = _TourRepository.FindById(id);
-            return _TourRepository.FindAll(x => x.Status == Status.Active
+            return _mapper.ProjectTo<TourViewModel>(_TourRepository.FindAll(x => x.Status == Status.Active
                 && x.Id != id && x.CategoryId == Tour.CategoryId)
             .OrderByDescending(x => x.DateCreated)
-            .Take(top)
-            .ProjectTo<TourViewModel>()
+            .Take(top))
             .ToList();
         }
 
         public List<TourViewModel> GetUpsellTours(int top)
         {
-            return _TourRepository.FindAll(x => x.Status == Status.Active && x.PromotionPrice != null)
+            return _mapper.ProjectTo<TourViewModel>(_TourRepository.FindAll(x => x.Status == Status.Active && x.PromotionPrice != null)
                .OrderByDescending(x => x.DateModified)
-               .Take(top)
-               .ProjectTo<TourViewModel>().ToList();
+               .Take(top)).ToList();
         }
 
         public List<TagViewModel> GetTourTags(int TourId)
@@ -434,47 +432,7 @@ namespace Travel.Application.Implementation
 
         public List<TourTagViewModel> GetTourTagsByTour(int TourId)
         {
-            return _TourTagRepository.FindAll().Where(x => x.TourId == TourId).Take(5).ProjectTo<TourTagViewModel>().ToList();
-        }
-
-        public List<TourViewModel> HotToursForMan(int top)
-        {
-            return _TourRepository.FindAll(x => x.Status == Status.Active && x.HotFlag == true)
-                .Where(x => x.TourCategory.Id == 1)
-                .OrderByDescending(x => x.DateModified)
-                .Take(top)
-                .ProjectTo<TourViewModel>()
-                .ToList();
-        }
-
-        public List<TourViewModel> HotToursForWomen(int top)
-        {
-            return _TourRepository.FindAll(x => x.Status == Status.Active && x.HotFlag == true)
-                .Where(x => x.TourCategory.Id == 2)
-                .OrderByDescending(x => x.DateModified)
-                .Take(top)
-                .ProjectTo<TourViewModel>()
-                .ToList();
-        }
-
-        public List<TourViewModel> HotToursForGirl(int top)
-        {
-            return _TourRepository.FindAll(x => x.Status == Status.Active && x.HotFlag == true)
-                .Where(x => x.TourCategory.Id == 3)
-                .OrderByDescending(x => x.DateModified)
-                .Take(top)
-                .ProjectTo<TourViewModel>()
-                .ToList();
-        }
-
-        public List<TourViewModel> HotToursForBoy(int top)
-        {
-            return _TourRepository.FindAll(x => x.Status == Status.Active && x.HotFlag == true)
-                .Where(x => x.TourCategory.Id == 4)
-                .OrderByDescending(x => x.DateModified)
-                .Take(top)
-                .ProjectTo<TourViewModel>()
-                .ToList();
+            return _mapper.ProjectTo<TourTagViewModel>(_TourTagRepository.FindAll().Where(x => x.TourId == TourId).Take(5)).ToList();
         }
 
         public void IncermentViewCount(int id)

@@ -9,8 +9,7 @@ namespace Travel.Data.EF.Configurations
     {
         public override void Configure(EntityTypeBuilder<TourTag> entity)
         {
-            entity.Property(c => c.TagId).HasMaxLength(50).IsRequired()
-            .HasColumnType("varchar(50)");
+            entity.Property(c => c.TagId).HasMaxLength(50).IsRequired();
             // etc.
         }
     }

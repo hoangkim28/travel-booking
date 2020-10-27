@@ -21,22 +21,25 @@ namespace Travel.Application.Implementation
         private readonly IBillDetailRepository _orderDetailRepository;
         private readonly ITourRepository _TourRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public BillService(IBillRepository orderRepository,
             IBillDetailRepository orderDetailRepository,
             ITourRepository TourRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IMapper mapper)
         {
             _orderRepository = orderRepository;
             _orderDetailRepository = orderDetailRepository;
             _TourRepository = TourRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public void Create(BillViewModel billVm)
         {
-            var order = Mapper.Map<BillViewModel, Bill>(billVm);
-            var orderDetails = Mapper.Map<List<BillDetailViewModel>, List<BillDetail>>(billVm.BillDetails);
+            var order = _mapper.Map<BillViewModel, Bill>(billVm);
+            var orderDetails = _mapper.Map<List<BillDetailViewModel>, List<BillDetail>>(billVm.BillDetails);
             foreach (var detail in orderDetails)
             {
                 var Tour = _TourRepository.FindById(detail.TourId);
@@ -54,7 +57,7 @@ namespace Travel.Application.Implementation
         public void Update(BillViewModel billVm)
         {
             //Mapping to order domain
-            var order = Mapper.Map<BillViewModel, Bill>(billVm);
+            var order = _mapper.Map<BillViewModel, Bill>(billVm);
             order.DateModified = DateTime.Now;
             //Get order Detail
             var newDetails = order.BillDetails;
@@ -133,11 +136,9 @@ namespace Travel.Application.Implementation
                 query = query.Where(x => x.CustomerName.Contains(keyword) || x.CustomerMobile.Contains(keyword));
             }
             var totalRow = query.Count();
-            var data = query.OrderByDescending(x => x.DateCreated)
-                .OrderBy(x => x.BillStatus)
+            var data = _mapper.ProjectTo<BillViewModel>(query.OrderByDescending(x => x.DateCreated)
                 .Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize)
-                .ProjectTo<BillViewModel>()
+                .Take(pageSize))
                 .ToList();
             return new PagedResult<BillViewModel>()
             {
@@ -151,24 +152,21 @@ namespace Travel.Application.Implementation
         public BillViewModel GetDetail(int billId)
         {
             var bill = _orderRepository.FindSingle(x => x.Id == billId);
-            var billVm = Mapper.Map<Bill, BillViewModel>(bill);
-            var billDetailVm = _orderDetailRepository.FindAll(x => x.BillId == billId)
-                .ProjectTo<BillDetailViewModel>()
-                .ToList();
+            var billVm = _mapper.Map<Bill, BillViewModel>(bill);
+            var billDetailVm = _mapper.ProjectTo<BillDetailViewModel>(_orderDetailRepository.FindAll(x => x.BillId == billId)).ToList();
             billVm.BillDetails = billDetailVm;
             return billVm;
         }
 
         public List<BillDetailViewModel> GetBillDetails(int billId)
         {
-            return _orderDetailRepository
-                .FindAll(x => x.BillId == billId, c => c.Bill, c => c.Tour)
-                .ProjectTo<BillDetailViewModel>().ToList();
+            return _mapper.ProjectTo<BillDetailViewModel>(_orderDetailRepository
+                .FindAll(x => x.BillId == billId, c => c.Bill, c => c.Tour)).ToList();
         }
 
         public BillDetailViewModel CreateDetail(BillDetailViewModel billDetailVm)
         {
-            var billDetail = Mapper.Map<BillDetailViewModel, BillDetail>(billDetailVm);
+            var billDetail = _mapper.Map<BillDetailViewModel, BillDetail>(billDetailVm);
             _orderDetailRepository.Add(billDetail);
             return billDetailVm;
         }
@@ -212,8 +210,7 @@ namespace Travel.Application.Implementation
 
         public List<BillViewModel> GetAll()
         {
-            return _orderRepository.FindAll().OrderBy(x => x.DateCreated)
-                 .ProjectTo<BillViewModel>().ToList();
+            return _mapper.ProjectTo<BillViewModel>(_orderRepository.FindAll().OrderBy(x => x.DateCreated)).ToList();
         }
     }
 }

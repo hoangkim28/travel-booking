@@ -23,6 +23,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using System;
+using Travel.Application.AutoMapper;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.Options;
 
 namespace Travel
 {
@@ -68,21 +71,27 @@ namespace Travel
                 options.IdleTimeout = TimeSpan.FromHours(2);
                 options.Cookie.HttpOnly = true;
             });
-            services.AddAutoMapper();
-            services.AddAuthentication()
-                .AddFacebook(fbOpts =>{
-                    fbOpts.AppId = "267936951066928";
-                    fbOpts.AppSecret = "fa69478bd4daf33a3788efa030c30e0f";
-                })
-                .AddGoogle(ggOpts => {
-                    ggOpts.ClientId = "355246919990-n6ce34beeg5oj9rce2pm9sae8cvv1osq.apps.googleusercontent.com";
-                    ggOpts.ClientSecret = "vvvJxH5FhWMxnZOIhlwLTfD8";
-                });
+            services.AddAutoMapper(typeof(Startup));
+            services.AddAuthentication();
+                //.AddFacebook(fbOpts =>{
+                //    fbOpts.AppId = "267936951066928";
+                //    fbOpts.AppSecret = "fa69478bd4daf33a3788efa030c30e0f";
+                //})
+                //.AddGoogle(ggOpts => {
+                //    ggOpts.ClientId = "355246919990-n6ce34beeg5oj9rce2pm9sae8cvv1osq.apps.googleusercontent.com";
+                //    ggOpts.ClientSecret = "vvvJxH5FhWMxnZOIhlwLTfD8";
+                //});
             // Add application services.
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<RoleManager<AppRole>, RoleManager<AppRole>>();
 
-            services.AddSingleton(Mapper.Configuration);
+            services.AddSingleton(AutoMapperConfig.RegisterMappings().CreateMapper());
+            services.AddControllers()
+                    .AddJsonOptions(options =>
+                    {
+                        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                    });
             services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
 
             services.AddTransient<IEmailSender, EmailSender>();
@@ -133,7 +142,8 @@ namespace Travel
             services.AddTransient<ICommonService, CommonService>();
             services.AddTransient<IViewRenderService, ViewRenderService>();
             services.AddTransient<IAuthorizationHandler, BaseResourceAuthorizationHandler>();
-            services.AddMvc(options =>
+
+            services.AddControllersWithViews(options =>
             {
                 options.CacheProfiles.Add("Default",
                     new CacheProfile()
@@ -147,18 +157,28 @@ namespace Travel
                         NoStore = true
                     });
             })
-                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix,
+                        opts => { opts.ResourcesPath = "Resources"; }
+                    )
+                .AddDataAnnotationsLocalization()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                });
+
+            services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddFile("Logs/Travel-{Date}.txt");
-            if (env.IsDevelopment())
+            if (env.EnvironmentName == EnvironmentName.Development)
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
-                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -167,24 +187,29 @@ namespace Travel
 
             app.UseStaticFiles();
 
+            app.UseRouting();
+
+
             app.UseSession();
 
             app.UseAuthentication();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-                routes.MapRoute(
-                    name: "areasRoute",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseAuthorization();
 
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            app.UseSession();
+
+            var options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(options.Value);
+
+            app.UseEndpoints(routes =>
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor |
-                ForwardedHeaders.XForwardedProto
+                routes.MapControllerRoute(
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapControllerRoute(
+                    "areaRoute",
+                    "{area:exists}/{controller=Login}/{action=Index}/{id?}");
             });
         }
     }

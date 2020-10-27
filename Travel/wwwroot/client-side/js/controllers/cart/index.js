@@ -21,7 +21,7 @@
                 }
             });
         });
-        $('body').on('keyup', '.txtQuantity', function (e) {
+        $('body').on('change', '.txtQuantity', function (e) {
             e.preventDefault();
             var id = $(this).data('id');
             var q = $(this).val();
@@ -33,10 +33,14 @@
                         TourId: id,
                         quantity: q
                     },
-                    success: function () {
-                        travel.notify('Đã cập nhật số lượng', 'success');
+                    success: function (respone) {
+                        if (respone.success) {
+                            travel.notify(respone.responseText, 'success');
+                        } else {
+                            travel.notify(respone.responseText, 'error');
+                        }
                         loadHeaderCart();
-                        loadData();
+                        loadData(true);
                     }
                 });
             } else {
@@ -48,8 +52,8 @@
             $.ajax({
                 url: '/Cart/ClearCart',
                 type: 'post',
-                success: function () {
-                    travel.notify('Đã xóa giỏ hàng!', 'success');
+                success: function (respone) {
+                    travel.notify(respone.responseText, 'success');
                     loadHeaderCart();
                     loadData();
                 }
@@ -66,7 +70,7 @@
                     TourId: id
                 },
                 success: function (response) {
-                    travel.notify('Đã xóa', 'success');
+                    travel.notify(response.responseText, 'success');
                     loadHeaderCart();
                     loadData(true);
                 }

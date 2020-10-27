@@ -29,8 +29,9 @@ namespace Travel.Data.Entities
 
         [MaxLength(255)]
         [Required]
-        public string Alias { set; get; }
 
+        public string Alias { set; get; }
+        [MaxLength(4000)]
         public string Content { set; get; }
         public Status Status { set; get; }
     }

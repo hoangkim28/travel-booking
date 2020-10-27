@@ -1,4 +1,6 @@
-﻿namespace Travel.Application.ViewModels.Tour
+﻿using System.Collections.Generic;
+
+namespace Travel.Application.ViewModels.Tour
 {
     public class BillDetailViewModel
     {

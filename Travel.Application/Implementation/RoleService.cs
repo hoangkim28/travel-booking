@@ -18,17 +18,18 @@ namespace Travel.Application.Implementation
     public class RoleService : IRoleService
     {
         private RoleManager<AppRole> _roleManager;
-        private IFunctionRepository _functionRepository;
-        private IPermissionRepository _permissionRepository;
-        private IUnitOfWork _unitOfWork;
-
+        private readonly IFunctionRepository _functionRepository;
+        private readonly IPermissionRepository _permissionRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
         public RoleService(RoleManager<AppRole> roleManager, IUnitOfWork unitOfWork,
-         IFunctionRepository functionRepository, IPermissionRepository permissionRepository)
+         IFunctionRepository functionRepository, IPermissionRepository permissionRepository, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _roleManager = roleManager;
             _functionRepository = functionRepository;
             _permissionRepository = permissionRepository;
+            _mapper = mapper;
         }
 
         public async Task<bool> AddAsync(AppRoleViewModel roleVm)
@@ -66,12 +67,12 @@ namespace Travel.Application.Implementation
 
         public async Task<List<AppRoleViewModel>> GetAllAsync()
         {
-            return await _roleManager.Roles.ProjectTo<AppRoleViewModel>().ToListAsync();
+            return await _mapper.ProjectTo<AppRoleViewModel>(_roleManager.Roles).ToListAsync();
         }
 
         public PagedResult<AppRoleViewModel> GetAllPagingAsync(string keyword, int page, int pageSize)
         {
-            var query = _roleManager.Roles;
+            var query = _mapper.ProjectTo<AppRoleViewModel>(_roleManager.Roles);
             if (!string.IsNullOrEmpty(keyword))
                 query = query.Where(x => x.Name.Contains(keyword)
                 || x.Description.Contains(keyword));
@@ -80,7 +81,7 @@ namespace Travel.Application.Implementation
             query = query.Skip((page - 1) * pageSize)
                .Take(pageSize);
 
-            var data = query.ProjectTo<AppRoleViewModel>().ToList();
+            var data = query.ToList();
             var paginationSet = new PagedResult<AppRoleViewModel>()
             {
                 Results = data,
@@ -95,7 +96,7 @@ namespace Travel.Application.Implementation
         public async Task<AppRoleViewModel> GetById(Guid id)
         {
             var role = await _roleManager.FindByIdAsync(id.ToString());
-            return Mapper.Map<AppRole, AppRoleViewModel>(role);
+            return _mapper.Map<AppRole, AppRoleViewModel>(role);
         }
 
         public List<PermissionViewModel> GetListFunctionWithRole(Guid roleId)
@@ -121,7 +122,7 @@ namespace Travel.Application.Implementation
 
         public void SavePermission(List<PermissionViewModel> permissionVms, Guid roleId)
         {
-            var permissions = Mapper.Map<List<PermissionViewModel>, List<Permission>>(permissionVms);
+            var permissions = _mapper.Map<List<PermissionViewModel>, List<Permission>>(permissionVms);
             var oldPermission = _permissionRepository.FindAll().Where(x => x.RoleId == roleId).ToList();
             if (oldPermission.Count > 0)
             {

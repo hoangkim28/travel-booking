@@ -116,12 +116,14 @@ namespace Travel.Data.Entities
         public int SeatAvailability { get; set; }
 
         [StringLength(50)]
+        [MaxLength(50)]
         public string Code { get; set; }
 
         [Column(TypeName = "Date")]
         public DateTime Departure { set; get; }
 
         [StringLength(255)]
+        [MaxLength(255)]
         public string Description { get; set; }
 
         public string Content { get; set; }
@@ -136,21 +138,25 @@ namespace Travel.Data.Entities
         public int Like { get; set; }
 
         [StringLength(255)]
+        [MaxLength(255)]
         public string Tags { get; set; }
 
         [ForeignKey("CategoryId")]
         public virtual TourCategory TourCategory { set; get; }
         [StringLength(255)]
+        [MaxLength(255)]
         public string SeoPageTitle { set; get; }
 
-        [Column(TypeName = "varchar(255)")]
         [StringLength(255)]
+        [MaxLength(255)]
         public string SeoAlias { set; get; }
 
         [StringLength(255)]
+        [MaxLength(255)]
         public string SeoKeywords { set; get; }
 
         [StringLength(255)]
+        [MaxLength(255)]
         public string SeoDescription { set; get; }
 
         public DateTime DateCreated { set; get; }

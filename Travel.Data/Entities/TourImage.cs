@@ -13,9 +13,11 @@ namespace Travel.Data.Entities
         public virtual Tour Tour { get; set; }
 
         [StringLength(250)]
+        [MaxLength(250)]
         public string Path { get; set; }
 
         [StringLength(250)]
+        [MaxLength(250)]
         public string Caption { get; set; }
     }
 }

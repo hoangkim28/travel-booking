@@ -48,14 +48,6 @@ namespace Travel.Application.Interfaces
 
         List<TourViewModel> GetHotTour(int top);
 
-        List<TourViewModel> HotToursForMan(int top);
-
-        List<TourViewModel> HotToursForWomen(int top);
-
-        List<TourViewModel> HotToursForGirl(int top);
-
-        List<TourViewModel> HotToursForBoy(int top);
-
         List<TourViewModel> GetRelatedTours(int id, int top);
 
         List<TourViewModel> GetUpsellTours(int top);

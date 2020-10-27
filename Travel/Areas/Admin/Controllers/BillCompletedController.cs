@@ -15,14 +15,14 @@ namespace Travel.Areas.Admin.Controllers
 {
     public class BillCompletedController : BaseController
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IAuthorizationService _authorizationService;
         private readonly ITourRepository _TourRepository;
         private readonly IBillCompletedDetailRepository _orderDetailRepository;
         private readonly IBillCompletedService _billCompletedService;
 
         public BillCompletedController(IBillCompletedService billCompletedService,
-            IHostingEnvironment hostingEnvironment,
+            IWebHostEnvironment hostingEnvironment,
             IAuthorizationService authorizationService,
             ITourRepository tourRepository,
             IBillDetailRepository orderDetailRepository)

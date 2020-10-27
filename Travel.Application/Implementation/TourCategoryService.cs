@@ -16,17 +16,18 @@ namespace Travel.Application.Implementation
     {
         private ITourCategoryRepository _TourCategoryRepository;
         private IUnitOfWork _unitOfWork;
-
+        private readonly IMapper _mapper;
         public TourCategoryService(ITourCategoryRepository TourCategoryRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, IMapper mapper)
         {
             _TourCategoryRepository = TourCategoryRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public TourCategoryViewModel Add(TourCategoryViewModel TourCategoryVm)
         {
-            var TourCategory = Mapper.Map<TourCategoryViewModel, TourCategory>(TourCategoryVm);
+            var TourCategory = _mapper.Map<TourCategoryViewModel, TourCategory>(TourCategoryVm);
             _TourCategoryRepository.Add(TourCategory);
             return TourCategoryVm;
         }
@@ -38,25 +39,23 @@ namespace Travel.Application.Implementation
 
         public List<TourCategoryViewModel> GetAll()
         {
-            return _TourCategoryRepository.FindAll().OrderBy(x => x.ParentId)
-                 .ProjectTo<TourCategoryViewModel>().ToList();
+            return _mapper.ProjectTo<TourCategoryViewModel>(_TourCategoryRepository.FindAll().OrderBy(x => x.ParentId)).ToList();
         }
 
         public List<TourCategoryViewModel> GetAll(string keyword)
         {
             if (!string.IsNullOrEmpty(keyword))
-                return _TourCategoryRepository.FindAll(x => x.Name.Contains(keyword)
+                return _mapper.ProjectTo<TourCategoryViewModel>(_TourCategoryRepository.FindAll(x => x.Name.Contains(keyword)
                 || x.Description.Contains(keyword))
-                    .OrderBy(x => x.ParentId).ProjectTo<TourCategoryViewModel>().ToList();
+                    .OrderBy(x => x.ParentId)).ToList();
             else
-                return _TourCategoryRepository.FindAll().OrderBy(x => x.ParentId)
-                    .ProjectTo<TourCategoryViewModel>()
+                return _mapper.ProjectTo<TourCategoryViewModel>(_TourCategoryRepository.FindAll().OrderBy(x => x.ParentId))
                     .ToList();
         }
 
         public PagedResult<TourCategoryViewModel> GetAllPaging(int? parentId, string keyword, int page, int pageSize)
         {
-            var query = _TourCategoryRepository.FindAll();
+            var query = _mapper.ProjectTo<TourCategoryViewModel>(_TourCategoryRepository.FindAll());
             if (!string.IsNullOrEmpty(keyword))
                 query = query.Where(x => x.Name.Contains(keyword));
             if (parentId.HasValue)
@@ -67,7 +66,7 @@ namespace Travel.Application.Implementation
             query = query.OrderByDescending(x => x.DateCreated)
                 .Skip((page - 1) * pageSize).Take(pageSize);
 
-            var data = query.ProjectTo<TourCategoryViewModel>().ToList();
+            var data = query.ToList();
 
             var paginationSet = new PagedResult<TourCategoryViewModel>()
             {
@@ -82,33 +81,30 @@ namespace Travel.Application.Implementation
 
         public List<TourCategoryViewModel> GetAllByParentId(int parentId)
         {
-            return _TourCategoryRepository.FindAll(x => x.Status == Status.Active
-            && x.ParentId == parentId)
-             .ProjectTo<TourCategoryViewModel>()
+            return _mapper.ProjectTo<TourCategoryViewModel>(_TourCategoryRepository.FindAll(x => x.Status == Status.Active
+            && x.ParentId == parentId))
              .ToList();
         }
 
         public List<TourCategoryViewModel> GetByParentId()
         {
-            return _TourCategoryRepository.FindAll(x => x.Status == Status.Active)
-             .ProjectTo<TourCategoryViewModel>()
+            return _mapper.ProjectTo<TourCategoryViewModel>(_TourCategoryRepository.FindAll(x => x.Status == Status.Active))
              .ToList();
         }
 
         public TourCategoryViewModel GetById(int id)
         {
-            return Mapper.Map<TourCategory, TourCategoryViewModel>(_TourCategoryRepository.FindById(id));
+            return _mapper.Map<TourCategory, TourCategoryViewModel>(_TourCategoryRepository.FindById(id));
         }
 
-        public List<TourCategoryViewModel> GetHomeCategories(int top)
+        public List<TourCategoryViewModel> GetHomeCategories()
         {
-            var query = _TourCategoryRepository
-                .FindAll(x => x.HomeFlag == true, c => c.Tours)
+            var query = _mapper.ProjectTo<TourCategoryViewModel>(_TourCategoryRepository
+                .FindAll(x => x.HomeFlag == true)
                 .Where(x => x.ParentId == null)
                 .Where(x => x.Status == Status.Active)
                 .Where(x => x.Tours.Count() > 0)
-                  .OrderBy(x => x.HomeOrder)
-                  .Take(top).ProjectTo<TourCategoryViewModel>();
+                .OrderBy(x => x.HomeOrder));
 
             var categories = query.ToList();
             foreach (var category in categories)
@@ -141,7 +137,7 @@ namespace Travel.Application.Implementation
 
         public void Update(TourCategoryViewModel TourCategoryVm)
         {
-            var TourCategory = Mapper.Map<TourCategoryViewModel, TourCategory>(TourCategoryVm);
+            var TourCategory = _mapper.Map<TourCategoryViewModel, TourCategory>(TourCategoryVm);
             _TourCategoryRepository.Update(TourCategory);
         }
 

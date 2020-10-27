@@ -28,19 +28,24 @@ namespace Travel.Data.Entities
         }
 
         [StringLength(250)]
+        [MaxLength(250)]
         [Required]
         public string Name { set; get; }
 
         [StringLength(50)]
+        [MaxLength(50)]
         public string Phone { set; get; }
 
         [StringLength(250)]
+        [MaxLength(250)]
         public string Email { set; get; }
 
         [StringLength(250)]
+        [MaxLength(250)]
         public string Website { set; get; }
 
         [StringLength(250)]
+        [MaxLength(250)]
         public string Address { set; get; }
 
         public string Other { set; get; }

@@ -18,6 +18,7 @@ namespace Travel.Data.Entities
         }
 
         [StringLength(250)]
+        [MaxLength(250)]
         public string Description { get; set; }
     }
 }

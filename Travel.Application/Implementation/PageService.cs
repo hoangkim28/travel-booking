@@ -14,19 +14,20 @@ namespace Travel.Application.Implementation
 {
     public class PageService : IPageService
     {
-        private IPageRepository _pageRepository;
-        private IUnitOfWork _unitOfWork;
-
+        private readonly IPageRepository _pageRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
         public PageService(IPageRepository pageRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this._pageRepository = pageRepository;
-            this._unitOfWork = unitOfWork;
+            _pageRepository = pageRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public void Add(PageViewModel pageVm)
         {
-            var page = Mapper.Map<PageViewModel, Page>(pageVm);
+            var page = _mapper.Map<PageViewModel, Page>(pageVm);
             _pageRepository.Add(page);
         }
 
@@ -42,12 +43,12 @@ namespace Travel.Application.Implementation
 
         public List<PageViewModel> GetAll()
         {
-            return _pageRepository.FindAll().ProjectTo<PageViewModel>().ToList();
+            return _mapper.ProjectTo<PageViewModel>(_pageRepository.FindAll()).ToList();
         }
 
         public PagedResult<PageViewModel> GetAllPaging(string keyword, int page, int pageSize)
         {
-            var query = _pageRepository.FindAll();
+            var query = _mapper.ProjectTo<PageViewModel>(_pageRepository.FindAll());
             if (!string.IsNullOrEmpty(keyword))
                 query = query.Where(x => x.Name.Contains(keyword));
 
@@ -58,7 +59,7 @@ namespace Travel.Application.Implementation
 
             var paginationSet = new PagedResult<PageViewModel>()
             {
-                Results = data.ProjectTo<PageViewModel>().ToList(),
+                Results = data.ToList(),
                 CurrentPage = page,
                 RowCount = totalRow,
                 PageSize = pageSize
@@ -69,12 +70,12 @@ namespace Travel.Application.Implementation
 
         public PageViewModel GetByAlias(string alias)
         {
-            return Mapper.Map<Page, PageViewModel>(_pageRepository.FindSingle(x => x.Alias == alias));
+            return _mapper.Map<Page, PageViewModel>(_pageRepository.FindSingle(x => x.Alias == alias));
         }
 
         public PageViewModel GetById(int id)
         {
-            return Mapper.Map<Page, PageViewModel>(_pageRepository.FindById(id));
+            return _mapper.Map<Page, PageViewModel>(_pageRepository.FindById(id));
         }
 
         public void SaveChanges()
@@ -84,7 +85,7 @@ namespace Travel.Application.Implementation
 
         public void Update(PageViewModel pageVm)
         {
-            var page = Mapper.Map<PageViewModel, Page>(pageVm);
+            var page = _mapper.Map<PageViewModel, Page>(pageVm);
             _pageRepository.Update(page);
         }
     }

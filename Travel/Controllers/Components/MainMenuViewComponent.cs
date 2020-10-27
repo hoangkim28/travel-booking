@@ -16,7 +16,7 @@ namespace Travel.Controllers.Components
 
         public IViewComponentResult Invoke()
         {
-            return View(_TourCategoryService.GetHomeCategories(10).ToList());
+            return View(_TourCategoryService.GetHomeCategories().Take(10).ToList());
         }
     }
 }

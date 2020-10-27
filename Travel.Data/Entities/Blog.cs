@@ -66,7 +66,7 @@ namespace Travel.Data.Entities
 
         [MaxLength(500)]
         public string Description { set; get; }
-
+        [MaxLength(4000)]
         public string Content { set; get; }
 
         public bool? HomeFlag { set; get; }

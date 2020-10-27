@@ -16,39 +16,41 @@ namespace Travel.Application.Implementation
     {
         private readonly IPlaceRepository _placeRepository;
         private readonly IUnitOfWork _unitOfWork;
-        public PlaceService(IPlaceRepository placeRepository, IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        public PlaceService(IPlaceRepository placeRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _placeRepository = placeRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         public void Create(PlaceViewModel placeVm)
         {
             placeVm.DateModified = DateTime.Now;
             placeVm.DateModified = DateTime.Now;
-            var page = Mapper.Map<PlaceViewModel, Place>(placeVm);
+            var page = _mapper.Map<PlaceViewModel, Place>(placeVm);
             _placeRepository.Add(page);
         }
 
         public void Update(PlaceViewModel placeVm)
         {
             placeVm.DateModified = DateTime.Now;
-            var page = Mapper.Map<PlaceViewModel, Place>(placeVm);
+            var page = _mapper.Map<PlaceViewModel, Place>(placeVm);
             _placeRepository.Update(page);
         }
 
         public List<PlaceViewModel> GetAll()
         {
-            return _placeRepository.FindAll().ProjectTo<PlaceViewModel>().ToList();
+            return _mapper.ProjectTo<PlaceViewModel>(_placeRepository.FindAll()).ToList();
         }
 
         public PlaceViewModel GetById(int placeId)
         {
-            return Mapper.Map<Place, PlaceViewModel>(_placeRepository.FindById(placeId));
+            return _mapper.Map<Place, PlaceViewModel>(_placeRepository.FindById(placeId));
         }
 
         public PagedResult<PlaceViewModel> GetAllPaging(string keyword, int page, int pageSize)
         {
-            var query = _placeRepository.FindAll();
+            var query = _mapper.ProjectTo<PlaceViewModel>(_placeRepository.FindAll());
             if (!string.IsNullOrEmpty(keyword))
                 query = query.Where(x => x.Name.Contains(keyword));
 
@@ -59,7 +61,7 @@ namespace Travel.Application.Implementation
 
             var paginationSet = new PagedResult<PlaceViewModel>()
             {
-                Results = data.ProjectTo<PlaceViewModel>().ToList(),
+                Results = data.ToList(),
                 CurrentPage = page,
                 RowCount = totalRow,
                 PageSize = pageSize

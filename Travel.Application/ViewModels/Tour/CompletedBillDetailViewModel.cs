@@ -1,4 +1,6 @@
-﻿namespace Travel.Application.ViewModels.Tour
+﻿using System.Collections.Generic;
+
+namespace Travel.Application.ViewModels.Tour
 {
     public class BillCompletedDetailViewModel
     {
@@ -12,7 +14,7 @@
 
         public decimal Price { set; get; }
 
-        public BillCompletedViewModel BillCompleted { set; get; }
+        public List<BillCompletedViewModel> BillCompleted { set; get; }
 
         public TourViewModel Tour { set; get; }
     }

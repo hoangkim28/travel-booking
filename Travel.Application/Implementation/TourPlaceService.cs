@@ -16,31 +16,33 @@ namespace Travel.Application.Implementation
     {
         private readonly ITourPlaceRepository _tourPlaceRepository;
         private readonly IUnitOfWork _unitOfWork;
-        public TourPlaceService(ITourPlaceRepository tourPlaceRepository, IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        public TourPlaceService(ITourPlaceRepository tourPlaceRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _tourPlaceRepository = tourPlaceRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         public void Create(TourPlaceViewModel placeVm)
         {
-            var page = Mapper.Map<TourPlaceViewModel, TourPlace>(placeVm);
+            var page = _mapper.Map<TourPlaceViewModel, TourPlace>(placeVm);
             _tourPlaceRepository.Add(page);
         }
 
         public void Update(TourPlaceViewModel placeVm)
         {
-            var page = Mapper.Map<TourPlaceViewModel, TourPlace>(placeVm);
+            var page = _mapper.Map<TourPlaceViewModel, TourPlace>(placeVm);
             _tourPlaceRepository.Update(page);
         }
 
         public List<TourPlaceViewModel> GetAll()
         {
-            return _tourPlaceRepository.FindAll().ProjectTo<TourPlaceViewModel>().ToList();
+            return _mapper.ProjectTo<TourPlaceViewModel>(_tourPlaceRepository.FindAll()).ToList();
         }
 
         public TourPlaceViewModel GetById(int placeId)
         {
-            return Mapper.Map<TourPlace, TourPlaceViewModel>(_tourPlaceRepository.FindById(placeId));
+            return _mapper.Map<TourPlace, TourPlaceViewModel>(_tourPlaceRepository.FindById(placeId));
         }
 
         public void Save()
@@ -61,10 +63,10 @@ namespace Travel.Application.Implementation
 
         public TourPlaceViewModel GetAllByTourId(int tourId)
         {
-            var model = _tourPlaceRepository.FindAll(x => x.TourId == tourId);
+            var model = _mapper.ProjectTo<TourPlaceViewModel>(_tourPlaceRepository.FindAll(x => x.TourId == tourId));
             if (model.Count() <= 0)
                 return null;
-            return model.ProjectTo<TourPlaceViewModel>().First();
+            return model.First();
         }
     }
 }

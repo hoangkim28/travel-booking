@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Travel.Application.Interfaces;
 using Travel.Application.ViewModels.Tour;
@@ -154,7 +156,7 @@ namespace Travel.Controllers
         public IActionResult ClearCart()
         {
             HttpContext.Session.Remove(CommonConstants.CartSession);
-            return new OkObjectResult("OK");
+            return Json(new { success = true, responseText = "Xóa thành công!" });
         }
 
         /// <summary>
@@ -169,7 +171,7 @@ namespace Travel.Controllers
             //Get Tour detail
             var Tour = _TourService.GetById(TourId);
             decimal Price = 0;
-            if (Tour.PromotionPrice==null || Tour.PromotionPrice==0)
+            if (Tour.PromotionPrice == null || Tour.PromotionPrice == 0)
             {
                 Price = Tour.Price;
             }
@@ -229,12 +231,12 @@ namespace Travel.Controllers
                     });
                     HttpContext.Session.Set(CommonConstants.CartSession, cart);
                 }
-                return new OkObjectResult(TourId);
-
+                return Json(new { success = true, responseText = "Đã thêm!" });
             }
             else
             {
-                return new EmptyResult();
+                return Json(new { success = false, responseText = "Lỗi!" });
+
             }
         }
 
@@ -262,9 +264,10 @@ namespace Travel.Controllers
                 {
                     HttpContext.Session.Set(CommonConstants.CartSession, session);
                 }
-                return new OkObjectResult(TourId);
+                return Json(new { success = hasChanged, responseText = "Đã xóa!" });
             }
-            return new EmptyResult();
+            return Json(new { success = false, responseText = "Lỗi!" });
+
         }
 
         /// <summary>
@@ -273,30 +276,47 @@ namespace Travel.Controllers
         /// <param name="TourId"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        public IActionResult UpdateCart(int TourId, int quantity, int color, int size)
+        public IActionResult UpdateCart(int TourId, int quantity)
         {
             var session = HttpContext.Session.Get<List<ShoppingCartViewModel>>(CommonConstants.CartSession);
             if (session != null)
             {
                 bool hasChanged = false;
-                foreach (var item in session)
+                if (_TourService.CheckSeatAvaliable(TourId, quantity))
                 {
-                    if (item.Tour.Id == TourId)
+                    foreach (var item in session)
                     {
-                        var Tour = _TourService.GetById(TourId);
-                        item.Tour = Tour;
-                        item.Quantity = quantity;
-                        item.Price = Tour.PromotionPrice ?? Tour.Price;
-                        hasChanged = true;
+                        if (item.Tour.Id == TourId)
+                        {
+                            var Tour = _TourService.GetById(TourId);
+                            decimal Price = 0;
+                            if (Tour.PromotionPrice == null || Tour.PromotionPrice == 0)
+                            {
+                                Price = Tour.Price;
+                            }
+                            else
+                            {
+                                Price = Tour.PromotionPrice.Value;
+                            }
+                            item.Tour = Tour;
+                            item.Quantity = quantity;
+                            item.Price = Price;
+                            hasChanged = true;
+                        }
                     }
+                    if (hasChanged)
+                    {
+                        HttpContext.Session.Set(CommonConstants.CartSession, session);
+                    }
+                    Response.StatusCode = (int)HttpStatusCode.OK;
+                    return Json(new { success = hasChanged, responseText = "Cập nhật thành công!" });
                 }
-                if (hasChanged)
+                else
                 {
-                    HttpContext.Session.Set(CommonConstants.CartSession, session);
+                    return Json(new { success = hasChanged, responseText = "Số vé còn lại không đủ!" });
                 }
-                return new OkObjectResult(TourId);
             }
-            return new EmptyResult();
+            return Json(new { success = false, responseText = "Lỗi!" });
         }
         #endregion
     }

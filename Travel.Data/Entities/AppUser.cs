@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Travel.Data.Enums;
 using Travel.Data.Interfaces;
@@ -25,12 +26,13 @@ namespace Travel.Data.Entities
             Status = status;
             Address = address;
         }
-
+        [MaxLength(100)]
         public string FullName { get; set; }
 
         public DateTime? BirthDay { set; get; }
-
+        [MaxLength(100)]
         public string Address { get; set; }
+        [MaxLength(100)]
         public string Avatar { get; set; }
 
         public DateTime DateCreated { get; set; }

@@ -14,19 +14,20 @@ namespace Travel.Application.Implementation
 {
     public class ContactService : IContactService
     {
-        private IContactRepository _contactRepository;
-        private IUnitOfWork _unitOfWork;
-
+        private readonly IContactRepository _contactRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
         public ContactService(IContactRepository contactRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this._contactRepository = contactRepository;
-            this._unitOfWork = unitOfWork;
+            _contactRepository = contactRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public void Add(ContactViewModel pageVm)
         {
-            var page = Mapper.Map<ContactViewModel, Contact>(pageVm);
+            var page = _mapper.Map<ContactViewModel, Contact>(pageVm);
             _contactRepository.Add(page);
         }
 
@@ -42,12 +43,12 @@ namespace Travel.Application.Implementation
 
         public List<ContactViewModel> GetAll()
         {
-            return _contactRepository.FindAll().ProjectTo<ContactViewModel>().ToList();
+            return _mapper.ProjectTo<ContactViewModel>(_contactRepository.FindAll()).ToList();
         }
 
         public PagedResult<ContactViewModel> GetAllPaging(string keyword, int page, int pageSize)
         {
-            var query = _contactRepository.FindAll();
+            var query = _mapper.ProjectTo<ContactViewModel>(_contactRepository.FindAll());
             if (!string.IsNullOrEmpty(keyword))
                 query = query.Where(x => x.Name.Contains(keyword));
 
@@ -58,7 +59,7 @@ namespace Travel.Application.Implementation
 
             var paginationSet = new PagedResult<ContactViewModel>()
             {
-                Results = data.ProjectTo<ContactViewModel>().ToList(),
+                Results = data.ToList(),
                 CurrentPage = page,
                 RowCount = totalRow,
                 PageSize = pageSize
@@ -69,7 +70,7 @@ namespace Travel.Application.Implementation
 
         public ContactViewModel GetById(string id)
         {
-            return Mapper.Map<Contact, ContactViewModel>(_contactRepository.FindById(id));
+            return _mapper.Map<Contact, ContactViewModel>(_contactRepository.FindById(id));
         }
 
         public void SaveChanges()
@@ -79,7 +80,7 @@ namespace Travel.Application.Implementation
 
         public void Update(ContactViewModel pageVm)
         {
-            var page = Mapper.Map<ContactViewModel, Contact>(pageVm);
+            var page = _mapper.Map<ContactViewModel, Contact>(pageVm);
             _contactRepository.Update(page);
         }
     }

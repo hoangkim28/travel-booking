@@ -2,6 +2,8 @@
 using Travel.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using AutoMapper;
+using Travel.Application.ViewModels.Tour;
 
 namespace Travel.Controllers
 {
@@ -9,30 +11,27 @@ namespace Travel.Controllers
     {
         private ITourService _TourService;
         private ITourCategoryService _TourCategoryService;
-
+        private readonly IMapper _mapper;
         private IBlogService _blogService;
         private ICommonService _commonService;
 
         public HomeController(ITourService TourService,
         IBlogService blogService, ICommonService commonService,
-       ITourCategoryService TourCategoryService)
+       ITourCategoryService TourCategoryService, IMapper mapper)
         {
             _blogService = blogService;
             _commonService = commonService;
             _TourService = TourService;
             _TourCategoryService = TourCategoryService;
+            _mapper = mapper;
         }
 
         [ResponseCache(CacheProfileName = "Default")]
         public IActionResult Index()
         {
             var homeVm = new HomeViewModel();
-            homeVm.HomeCategories = _TourCategoryService.GetHomeCategories(12);
+            homeVm.HomeCategories = (System.Collections.Generic.List<TourCategoryViewModel>)_mapper.ProjectTo<TourCategoryViewModel>((System.Linq.IQueryable)_TourCategoryService.GetHomeCategories());
             homeVm.HotTours = _TourService.GetHotTour(6);
-            homeVm.HotToursForBoy = _TourService.HotToursForBoy(12);
-            homeVm.HotToursForGirl = _TourService.HotToursForGirl(12);
-            homeVm.HotToursForMan = _TourService.HotToursForMan(12);
-            homeVm.HotToursForWomen = _TourService.HotToursForWomen(12);
             homeVm.TopSellTours = _TourService.GetLastest(6);
             homeVm.LastestBlogs = _blogService.GetLastest(6);
             homeVm.HomeSlides = _commonService.GetSlides("top");

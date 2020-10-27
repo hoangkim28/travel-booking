@@ -34,15 +34,17 @@ namespace Travel.Data.Entities
             SeoKeywords = seoKeywords;
             SeoDescription = seoDescription;
         }
-
+        [MaxLength(100)]
         public string Name { get; set; }
         [StringLength(255)]
+        [MaxLength(255)]
         public string Description { get; set; }
 
         public int? ParentId { get; set; }
 
         public int? HomeOrder { get; set; }
         [StringLength(255)]
+        [MaxLength(255)]
         public string Image { get; set; }
 
         public bool? HomeFlag { get; set; }

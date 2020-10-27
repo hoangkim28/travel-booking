@@ -26,8 +26,8 @@ namespace Travel.Data.Entities
         [Required]
         public Guid RoleId { get; set; }
 
-        [StringLength(128)]
         [Required]
+        [MaxLength(128)]
         public string FunctionId { get; set; }
 
         public bool CanCreate { set; get; }

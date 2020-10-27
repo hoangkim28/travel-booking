@@ -25,13 +25,16 @@ namespace Travel.Data.Entities
 
         [Required]
         [StringLength(128)]
+        [MaxLength(128)]
         public string Name { set; get; }
 
         [Required]
         [StringLength(250)]
+        [MaxLength(250)]
         public string URL { set; get; }
 
         [StringLength(128)]
+        [MaxLength(128)]
         public string ParentId { set; get; }
 
         public string IconCss { get; set; }

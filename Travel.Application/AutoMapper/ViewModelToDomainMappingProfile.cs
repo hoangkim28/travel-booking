@@ -13,8 +13,8 @@ namespace Travel.Application.AutoMapper
         public ViewModelToDomainMappingProfile()
         {
             CreateMap<TourCategoryViewModel, TourCategory>()
-                    .ConstructUsing(c => new TourCategory(c.Name, c.Description, c.ParentId, c.HomeOrder, c.Image, c.HomeFlag,
-                    c.SortOrder, c.Status, c.SeoPageTitle, c.SeoAlias, c.SeoKeywords, c.SeoDescription));
+            .ConstructUsing(c => new TourCategory(c.Name, c.Description, c.ParentId, c.HomeOrder, c.Image, c.HomeFlag,
+            c.SortOrder, c.Status, c.SeoPageTitle, c.SeoAlias, c.SeoKeywords, c.SeoDescription));
 
             CreateMap<TourViewModel, Tour>()
            .ConstructUsing(c => new Tour(c.Id, c.Name, c.CategoryId, c.Image, c.Price, c.OriginalPrice,
@@ -46,7 +46,7 @@ namespace Travel.Application.AutoMapper
             CreateMap<BillCompletedViewModel, BillCompleted>()
               .ConstructUsing(c => new BillCompleted(c.Id, c.CustomerName, c.CustomerAddress,
               c.CustomerMobile, c.CustomerEmail, c.CustomerMessage,
-              c.PaymentMethod, c.CustomerId, c.UserId,c.OrderId));
+              c.PaymentMethod, c.CustomerId, c.UserId, c.OrderId));
 
             CreateMap<BillDetailViewModel, BillDetail>()
               .ConstructUsing(c => new BillDetail(c.Id, c.BillId, c.TourId,

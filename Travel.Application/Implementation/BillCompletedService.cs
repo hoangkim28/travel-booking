@@ -21,22 +21,25 @@ namespace Travel.Application.Implementation
         private readonly IBillCompletedDetailRepository _orderCompletedDetailRepository;
         private readonly ITourRepository _TourRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public BillCompletedService(IBillCompletedRepository orderCompletedRepository,
             IBillCompletedDetailRepository orderDetailRepository,
             ITourRepository TourRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IMapper mapper)
         {
             _orderCompletedRepository = orderCompletedRepository;
             _orderCompletedDetailRepository = orderDetailRepository;
             _TourRepository = TourRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public void Create(BillCompletedViewModel billVm)
         {
-            var orderCompleted = Mapper.Map<BillCompletedViewModel, BillCompleted>(billVm);
-            var orderDetails = Mapper.Map<List<BillCompletedDetailViewModel>, List<BillCompletedDetail>>(billVm.BillCompletedDetails);
+            var orderCompleted = _mapper.Map<BillCompletedViewModel, BillCompleted>(billVm);
+            var orderDetails = _mapper.Map<List<BillCompletedDetailViewModel>, List<BillCompletedDetail>>(billVm.BillCompletedDetails);
             
             foreach (var detail in orderDetails)
             {
@@ -80,10 +83,9 @@ namespace Travel.Application.Implementation
                 query = query.Where(x => x.CustomerName.Contains(keyword) || x.CustomerMobile.Contains(keyword));
             }
             var totalRow = query.Count();
-            var data = query.OrderByDescending(x => x.DateCreated)
+            var data = _mapper.ProjectTo<BillCompletedViewModel>(query.OrderByDescending(x => x.DateCreated)
                 .Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize)
-                .ProjectTo<BillCompletedViewModel>()
+                .Take(pageSize))
                 .ToList();
             return new PagedResult<BillCompletedViewModel>()
             {
@@ -96,17 +98,16 @@ namespace Travel.Application.Implementation
 
         public List<BillCompletedViewModel> GetCompletedBillDetails(int billId)
         {
-            throw new NotImplementedException();
+            return _mapper.ProjectTo<BillCompletedViewModel>(_orderCompletedDetailRepository
+            .FindAll(x => x.BillId == billId, c => c.BillCompleted,c => c.Tour)).ToList();
         }
 
         public BillCompletedViewModel GetDetail(int billId)
         {
             var bill = _orderCompletedRepository.FindSingle(x => x.Id == billId);
-            var billVm = Mapper.Map<BillCompleted, BillCompletedViewModel>(bill);
-            var billDetailVm = _orderCompletedDetailRepository.FindAll(x => x.BillId == billId)
-                .ProjectTo<BillCompletedDetailViewModel>()
-                .ToList();
-            billVm.BillCompletedDetails = billDetailVm;
+            var billVm = _mapper.Map<BillCompleted, BillCompletedViewModel>(bill);
+            var billDetailVm = _mapper.ProjectTo<BillCompletedViewModel>(_orderCompletedRepository.FindAll(x => x.OrderId == billId)).ToList();
+            //billVm.BillCompletedDetails = billDetailVm;
             return billVm;
         }
 

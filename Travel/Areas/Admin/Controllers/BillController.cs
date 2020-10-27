@@ -30,7 +30,7 @@ namespace Travel.Areas.Admin.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IBillService _billService;
         private readonly IBillCompletedService _billCompletedService;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IAuthorizationService _authorizationService;
         private readonly ITourRepository _TourRepository;
         private readonly IBillDetailRepository _orderDetailRepository;
@@ -38,7 +38,7 @@ namespace Travel.Areas.Admin.Controllers
         private readonly IBillCompletedDetailRepository _orderCompletedDetailRepository;
         private readonly IBillRepository _orderRepository;
         public BillController(IBillService billService,
-            IHostingEnvironment hostingEnvironment,
+            IWebHostEnvironment hostingEnvironment,
             IAuthorizationService authorizationService,
             ITourRepository tourRepository,
             IBillDetailRepository orderDetailRepository,
@@ -279,7 +279,7 @@ namespace Travel.Areas.Admin.Controllers
                     foreach (var orderDetail in orderDetails)
                     {
                         worksheet.Cells[rowIndex, 1].Value = count.ToString();
-                        worksheet.Cells[rowIndex, 2].Value = orderDetail.Tour.Name;
+                        worksheet.Cells[rowIndex, 2].Value = orderDetail.Tour;
                         worksheet.Cells[rowIndex, 3].Value = orderDetail.Quantity.ToString();
                         worksheet.Cells[rowIndex, 4].Value = orderDetail.Price.ToString("N0");
                         worksheet.Cells[rowIndex, 5].Value = (orderDetail.Price * orderDetail.Quantity).ToString("N0");

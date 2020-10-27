@@ -9,7 +9,7 @@ namespace Travel.Data.Entities
         public int TourId { get; set; }
 
         [StringLength(50)]
-        [Column(TypeName = "varchar")]
+        [MaxLength(50)]
         public string TagId { set; get; }
 
         [ForeignKey("TourId")]

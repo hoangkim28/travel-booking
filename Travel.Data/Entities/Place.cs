@@ -34,8 +34,10 @@ namespace Travel.Data.Entities
         [Required]
         public string Name { get; set; }
         [StringLength(255)]
+        [MaxLength(255)]
         public string Image { get; set; }
         [StringLength(255)]
+        [MaxLength(255)]
         public string Description { get; set; }
 
         public DateTime DateCreated { set; get; }
