@@ -8,6 +8,7 @@ namespace Travel.Services
         public static Task SendEmailConfirmationAsync(this IEmailSender emailSender, string email, string link)
         {
             return emailSender.SendEmailAsync(email, "XAC NHAN TAI KHOAN",
+                $"quý khách hàng đã đăng ký thành công",
                 $"Nhấn vào đường dẫn này để xác nhận tài khoản: <a href='{HtmlEncoder.Default.Encode(link)}'>link</a>");
         }
     }

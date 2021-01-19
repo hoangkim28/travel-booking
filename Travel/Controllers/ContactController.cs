@@ -46,7 +46,7 @@ namespace Travel.Controllers
                 _feedbackService.Add(model.Feedback);
                 _feedbackService.SaveChanges();
                 var content = await _viewRenderService.RenderToStringAsync("Contact/_ContactMail", model.Feedback);
-                await _emailSender.SendEmailAsync(_configuration["MailSettings:AdminMail"], "Hỗ trợ/Yêu cầu từ khách hàng: " + model.Feedback.Email, content);
+                await _emailSender.SendEmailAsync(_configuration["MailSettings:AdminMail"], "Hỗ trợ/Yêu cầu từ khách hàng: " + model.Feedback.Email, content, "");
                 ViewData["Success"] = true;
             }
 

@@ -15,7 +15,7 @@ namespace Travel.Services
         {
             _configuration = configuration;
         }
-        public Task SendEmailAsync(string email, string subject, string message)
+        public Task SendEmailAsync(string email, string subject, string message, string link)
         {
             SmtpClient client = new SmtpClient(_configuration["MailSettings:Server"])
             {
