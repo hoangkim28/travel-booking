@@ -383,7 +383,8 @@ namespace Travel.Application.Implementation
 
         public List<TourViewModel> GetLastest(int top)
         {
-            return _TourRepository.FindAll(x => x.Status == Status.Active).OrderByDescending(x => x.DateModified)
+            var now = DateTime.Now;
+            return _TourRepository.FindAll(x => x.Status == Status.Active).Where(x => x.Departure >= now).OrderByDescending(x => x.DateModified)
                 .Take(top).ProjectTo<TourViewModel>().ToList();
         }
 
